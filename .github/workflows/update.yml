@@ -4,7 +4,7 @@ on:
   schedule:
     # 毎週金曜 JST 9:00 (UTC 0:00) に実行
     - cron: "0 0 * * 5"
-  workflow_dispatch:  # 手動実行も可能
+  workflow_dispatch: # 手動実行も可能
 
 jobs:
   update:
