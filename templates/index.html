@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>果実市況・レシピ提案</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+           background: #f5f5f0; color: #333; }
+    header { background: #2d6a4f; color: #fff; padding: 16px 24px;
+             display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 1.3rem; }
+    header .week { font-size: 0.9rem; opacity: 0.8; }
+    .container { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+    .section { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px;
+               box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    h2 { font-size: 1.1rem; color: #2d6a4f; margin-bottom: 14px; border-left: 4px solid #2d6a4f;
+         padding-left: 10px; }
+
+    /* ランキング */
+    .ranking-list { list-style: none; }
+    .ranking-list li { display: flex; align-items: center; padding: 10px 0;
+                       border-bottom: 1px solid #eee; gap: 12px; }
+    .ranking-list li:last-child { border-bottom: none; }
+    .rank-num { font-size: 1.5rem; font-weight: bold; color: #2d6a4f; width: 36px; text-align: center; }
+    .rank-num.gold { color: #d4a017; }
+    .rank-num.silver { color: #888; }
+    .rank-num.bronze { color: #a0522d; }
+    .rank-info { flex: 1; }
+    .rank-item { font-weight: bold; font-size: 1rem; }
+    .rank-reason { font-size: 0.85rem; color: #666; margin-top: 2px; }
+    .rank-score { font-size: 0.9rem; }
+    .stars { color: #f4a261; }
+
+    /* 市況テーブル */
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th { background: #2d6a4f; color: #fff; padding: 8px 10px; text-align: left; }
+    td { padding: 7px 10px; border-bottom: 1px solid #eee; }
+    tr:hover td { background: #f0f7f4; }
+    .arrow-up { color: #e63946; }
+    .arrow-down { color: #457b9d; }
+
+    /* レシピ */
+    .recipes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .recipe-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; }
+    .recipe-card h3 { font-size: 1rem; color: #2d6a4f; margin-bottom: 6px; }
+    .recipe-meta { font-size: 0.8rem; color: #888; margin-bottom: 10px; }
+    .recipe-ingredients { font-size: 0.85rem; margin-bottom: 10px; }
+    .recipe-ingredients span { display: inline-block; background: #e9f5ee; border-radius: 4px;
+                                padding: 2px 7px; margin: 2px; }
+    .recipe-steps { font-size: 0.85rem; padding-left: 16px; color: #444; }
+    .recipe-steps li { margin-bottom: 4px; }
+
+    /* 更新ボタン・ログ */
+    .update-btn { background: #2d6a4f; color: #fff; border: none; border-radius: 6px;
+                  padding: 10px 24px; cursor: pointer; font-size: 0.95rem; }
+    .update-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #log-box { margin-top: 14px; background: #1a1a2e; color: #a8ff78; border-radius: 6px;
+               padding: 12px; font-family: monospace; font-size: 0.82rem;
+               max-height: 200px; overflow-y: auto; display: none; }
+
+    .no-data { color: #999; font-size: 0.9rem; padding: 12px 0; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>🍊 果実市況・レシピ提案</h1>
+  <span class="week">{{ week or "データなし" }}</span>
+</header>
+
+<div class="container">
+
+  {% if recipe_data %}
+  <!-- ランキング -->
+  <div class="section">
+    <h2>🏆 今週のおすすめランキング</h2>
+    <p style="font-size:.85rem;color:#555;margin-bottom:12px;">{{ recipe_data.market_comment }}</p>
+    <ul class="ranking-list">
+      {% for r in recipe_data.ranking %}
+      <li>
+        <div class="rank-num {% if r.rank==1 %}gold{% elif r.rank==2 %}silver{% elif r.rank==3 %}bronze{% endif %}">
+          {{ r.rank }}
+        </div>
+        <div class="rank-info">
+          <div class="rank-item">{{ r.item }}</div>
+          <div class="rank-reason">{{ r.reason }}</div>
+        </div>
+        <div class="rank-score">
+          <span class="stars">{{ "★" * (r.score // 20) }}{{ "☆" * (5 - r.score // 20) }}</span>
+          <br><small>{{ r.score }}点</small>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- レシピ -->
+  <div class="section">
+    <h2>🍽️ 簡単レシピ</h2>
+    <div class="recipes">
+      {% for recipe in recipe_data.recipes %}
+      <div class="recipe-card">
+        <h3>{{ recipe.title }}</h3>
+        <div class="recipe-meta">🕐 {{ recipe.time_min }}分 / {{ recipe.servings }}人分 — {{ recipe.item }}</div>
+        <div class="recipe-ingredients">
+          {% for ing in recipe.ingredients %}
+          <span>{{ ing }}</span>
+          {% endfor %}
+        </div>
+        <ol class="recipe-steps">
+          {% for step in recipe.steps %}
+          <li>{{ step }}</li>
+          {% endfor %}
+        </ol>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="section">
+    <p class="no-data">レシピデータがありません。「データ更新」を実行してください。</p>
+  </div>
+  {% endif %}
+
+  <!-- 市況テーブル -->
+  {% if items %}
+  <div class="section">
+    <h2>📊 市況データ（{{ week }}）</h2>
+    <table>
+      <thead>
+        <tr><th>品目</th><th>入荷量(t)</th><th>前週比</th><th>前年比</th><th>高値(円)</th><th>中値(円)</th><th>安値(円)</th></tr>
+      </thead>
+      <tbody>
+        {% for r in items %}
+        <tr>
+          <td>{{ r.品目 }}</td>
+          <td>{{ r["入荷量t"] or "—" }}</td>
+          <td>
+            {% set wow = r["前週比%"] %}
+            {% if wow %}
+              {% set v = wow|int %}
+              <span class="{{ 'arrow-up' if v > 100 else 'arrow-down' if v < 100 else '' }}">
+                {{ "▲" if v > 100 else "▼" if v < 100 else "―" }} {{ v }}%
+              </span>
+            {% else %}—{% endif %}
+          </td>
+          <td>{{ r["前年比%"] ~ "%" if r["前年比%"] else "—" }}</td>
+          <td>{{ r["高値円"] or "—" }}</td>
+          <td>{{ r["中値円"] or "—" }}</td>
+          <td>{{ r["安値円"] or "—" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- 更新パネル -->
+  <div class="section">
+    <h2>🔄 データ更新</h2>
+    <p style="font-size:.85rem;color:#666;margin-bottom:12px;">
+      市況データを取得し、AIでレシピ・ランキングを再生成します（数分かかります）。
+    </p>
+    <button class="update-btn" id="update-btn" onclick="startUpdate()">データ更新</button>
+    <div id="log-box"></div>
+  </div>
+
+</div>
+
+<script>
+function startUpdate() {
+  const btn = document.getElementById('update-btn');
+  const log = document.getElementById('log-box');
+  btn.disabled = true;
+  log.style.display = 'block';
+  log.textContent = '';
+
+  const es = new EventSource('/update');
+  es.onmessage = (e) => {
+    const d = JSON.parse(e.data);
+    if (d.log)    { log.textContent += d.log + '\n'; log.scrollTop = log.scrollHeight; }
+    if (d.status) { log.textContent += '▶ ' + d.status + '\n'; }
+    if (d.error)  { log.textContent += '❌ ' + d.error + '\n'; es.close(); btn.disabled = false; }
+    if (d.done)   {
+      log.textContent += '✅ 完了！ページを再読み込みします...\n';
+      es.close();
+      setTimeout(() => location.reload(), 1500);
+    }
+  };
+  es.onerror = () => {
+    log.textContent += '⚠️ 接続エラー\n';
+    es.close();
+    btn.disabled = false;
+  };
+}
+</script>
+</body>
+</html>

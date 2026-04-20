@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>果実市況・レシピ提案</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;
+          background:#f5f5f0;color:#333}
+    header{background:#2d6a4f;color:#fff;padding:16px 24px;
+            display:flex;align-items:center;justify-content:space-between}
+    header h1{font-size:1.3rem}
+    header .week{font-size:.9rem;opacity:.8}
+    .container{max-width:960px;margin:24px auto;padding:0 16px}
+    .section{background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;
+              box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    h2{font-size:1.1rem;color:#2d6a4f;margin-bottom:14px;border-left:4px solid #2d6a4f;padding-left:10px}
+    .ranking-list{list-style:none}
+    .ranking-list li{display:flex;align-items:center;padding:10px 0;
+                      border-bottom:1px solid #eee;gap:12px}
+    .ranking-list li:last-child{border-bottom:none}
+    .rank-num{font-size:1.5rem;font-weight:bold;color:#2d6a4f;width:36px;text-align:center}
+    .rank-num.gold{color:#d4a017}.rank-num.silver{color:#888}.rank-num.bronze{color:#a0522d}
+    .rank-info{flex:1}
+    .rank-item{font-weight:bold;font-size:1rem}
+    .rank-reason{font-size:.85rem;color:#666;margin-top:2px}
+    .stars{color:#f4a261}
+    table{width:100%;border-collapse:collapse;font-size:.88rem}
+    th{background:#2d6a4f;color:#fff;padding:8px 10px;text-align:left}
+    td{padding:7px 10px;border-bottom:1px solid #eee}
+    tr:hover td{background:#f0f7f4}
+    .up{color:#e63946}.down{color:#457b9d}
+    .recipes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .recipe-card{border:1px solid #e0e0e0;border-radius:8px;padding:16px}
+    .recipe-card h3{font-size:1rem;color:#2d6a4f;margin-bottom:6px}
+    .recipe-meta{font-size:.8rem;color:#888;margin-bottom:10px}
+    .recipe-ingredients span{display:inline-block;background:#e9f5ee;border-radius:4px;
+                              padding:2px 7px;margin:2px;font-size:.85rem}
+    .recipe-steps{font-size:.85rem;padding-left:16px;color:#444;margin-top:8px}
+    .recipe-steps li{margin-bottom:4px}
+    .no-data{color:#999;font-size:.9rem;padding:12px 0}
+    footer{text-align:center;padding:20px;font-size:.8rem;color:#aaa}
+  </style>
+</head>
+<body>
+<header>
+  <h1>🍊 果実市況・レシピ提案</h1>
+  <span class="week">２０２４年４月第４週</span>
+</header>
+<div class="container">
+
+  <div class="section">
+    <h2>🏆 今週のおすすめランキング</h2>
+    
+    <p class="no-data">レシピ・ランキングデータがありません。GitHub Actionsを実行してください。</p>
+  </div>
+
+  <div class="section">
+    <h2>🍽️ 簡単レシピ</h2>
+    
+  </div>
+
+  <div class="section">
+    <h2>📊 市況データ（２０２４年４月第４週）</h2>
+    
+    <table>
+      <thead>
+        <tr><th>品目</th><th>入荷量(t)</th><th>前週比</th><th>前年比</th>
+            <th>高値(円)</th><th>中値(円)</th><th>安値(円)</th></tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>あまなつかん</td>
+        <td>43</td>
+        <td><span class="down">▼74%</span></td>
+        <td>86%</td>
+        <td>3240</td>
+        <td>2124</td>
+        <td>1080</td>
+      </tr>
+      <tr>
+        <td>はっさく</td>
+        <td>20</td>
+        <td><span class="down">▼99%</span></td>
+        <td>150%</td>
+        <td>4860</td>
+        <td>2520</td>
+        <td>1188</td>
+      </tr>
+      <tr>
+        <td>河内晩柑</td>
+        <td>59</td>
+        <td><span class="up">▲118%</span></td>
+        <td>120%</td>
+        <td>2484</td>
+        <td>1987</td>
+        <td>1188</td>
+      </tr>
+      <tr>
+        <td>不知火</td>
+        <td>51</td>
+        <td><span class="down">▼89%</span></td>
+        <td>114%</td>
+        <td>5076</td>
+        <td>3420</td>
+        <td>2268</td>
+      </tr>
+      <tr>
+        <td>清見</td>
+        <td>13</td>
+        <td><span class="down">▼55%</span></td>
+        <td>69%</td>
+        <td>4104</td>
+        <td>3024</td>
+        <td>2160</td>
+      </tr>
+      <tr>
+        <td>りんご</td>
+        <td>177</td>
+        <td><span class="up">▲102%</span></td>
+        <td>76%</td>
+        <td>8640</td>
+        <td>5054</td>
+        <td>1944</td>
+      </tr>
+      <tr>
+        <td>いちご</td>
+        <td>152</td>
+        <td><span class="down">▼94%</span></td>
+        <td>78%</td>
+        <td>250</td>
+        <td>108</td>
+        <td>95</td>
+      </tr>
+      <tr>
+        <td>アールスメロン</td>
+        <td>12</td>
+        <td><span class="up">▲154%</span></td>
+        <td>98%</td>
+        <td>4320</td>
+        <td>2160</td>
+        <td>1404</td>
+      </tr>
+      <tr>
+        <td>アンデスメロン</td>
+        <td>14</td>
+        <td><span class="up">▲172%</span></td>
+        <td>101%</td>
+        <td>5076</td>
+        <td>4077</td>
+        <td>1944</td>
+      </tr>
+      <tr>
+        <td>すいか</td>
+        <td>145</td>
+        <td><span class="up">▲140%</span></td>
+        <td>94%</td>
+        <td>8640</td>
+        <td>5875</td>
+        <td>1944</td>
+      </tr>
+      <tr>
+        <td>こだますいか</td>
+        <td>25</td>
+        <td><span class="up">▲123%</span></td>
+        <td>82%</td>
+        <td>6480</td>
+        <td>4725</td>
+        <td>3024</td>
+      </tr>
+      <tr>
+        <td>キウイ</td>
+        <td>14</td>
+        <td><span class="up">▲122%</span></td>
+        <td>117%</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+      </tr></tbody>
+    </table>
+  </div>
+
+</div>
+<footer>更新: 2026-04-20 20:57 JST | データ: 東京都中央卸売市場</footer>
+</body>
+</html>
