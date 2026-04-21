@@ -249,7 +249,7 @@ def extract_data(url):
 
 
 if __name__ == "__main__":
-    base_url = "https://www.shijou.metro.tokyo.lg.jp/torihiki/week/kajitsu"
+    base_url = "https://www.shijou.metro.tokyo.lg.jp/torihiki/week/yasai"
     week_links = get_weekly_links(base_url)
     print(f"週リンク数: {len(week_links)}")
     all_rows = []
