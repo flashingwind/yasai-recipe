@@ -48,12 +48,3 @@ jobs:
           git add docs/ market_data_*.csv recipes_*.json
           git diff --cached --quiet || git commit -m "chore: 市況データ更新 $(date +'%Y-%m-%d')"
           git push
-
-      - name: Cloudflare Pages デプロイ
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: yasai-recipe
-          directory: docs
-          productionBranch: master
