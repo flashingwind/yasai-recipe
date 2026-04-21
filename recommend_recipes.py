@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """
-最新市況データをもとに Claude API でおすすめランクとレシピを生成する。
+市況データをもとにランキングとレシピを生成する。
+- ランキング: 統計ルール（ranking_rules.json）で計算（API呼び出しなし）
+- コメント・レシピ: Claude API で生成（週ごとキャッシュ）
 """
 import csv
 import glob
+import json
 import os
 import re
 import sys
 
-# .envファイルがあれば読み込む
 _env_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(_env_path):
     with open(_env_path) as _f:
@@ -19,6 +21,50 @@ if os.path.exists(_env_path):
                 os.environ.setdefault(_k.strip(), _v.strip().strip('"').strip("'"))
 
 import anthropic
+
+# ── ランキングルール ────────────────────────────────────────────────────────
+
+def load_ranking_rules():
+    try:
+        with open("ranking_rules.json", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("❌ ranking_rules.json が見つかりません。")
+        print("先に generate_ranking_rules.py を実行してください。")
+        sys.exit(1)
+
+
+def calculate_score(item, rules, max_values):
+    """統計ルールでスコアを計算"""
+    try:
+        vol = float(item["入荷量t"] or 0)
+        wow = float(item["前週比%"] or 100)
+        yoy = float(item["前年比%"] or 100)
+        price = float(item["中値円"] or max_values["price"])
+    except (ValueError, KeyError):
+        return 0
+
+    # 豊富さ
+    richness = (vol / max_values["vol"]) * 100 if max_values["vol"] > 0 else 0
+
+    # トレンド
+    trend = max(min((wow - 50) / 150 * 100, 100), 0)
+
+    # 旬度
+    seasonality = 100 - min(abs(yoy - 100) * 0.8, 100)
+
+    # 手頃さ
+    affordability = (1 - price / max_values["price"]) * 100 if max_values["price"] > 0 else 0
+
+    # 総合スコア
+    score = (
+        0.30 * richness +
+        0.15 * trend +
+        0.25 * seasonality +
+        0.30 * affordability
+    )
+    return int(score)
+
 
 # ── CSV読込 ──────────────────────────────────────────────────────────────────
 
@@ -33,13 +79,11 @@ def get_latest_csv():
 def load_latest_week(csvfile):
     with open(csvfile, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
-    # 半角数字の週に絞り込み（旧形式の全角週を除外）
     valid = [r for r in rows if re.match(r"\d{4}年", r["週"])]
     if not valid:
         return [], ""
     latest_week = sorted(set(r["週"] for r in valid), reverse=True)[0]
     items = [r for r in valid if r["週"] == latest_week]
-    # 品目名で重複除去（同一品目が複数ページで取れる場合）
     seen, unique = set(), []
     for r in items:
         name = r["品目"].strip()
@@ -49,7 +93,22 @@ def load_latest_week(csvfile):
     return unique, latest_week
 
 
-# ── プロンプト構築 ──────────────────────────────────────────────────────────
+def calc_max_values(items):
+    """各カテゴリの最大値を計算"""
+    max_vol = 1
+    max_price = 1
+    for r in items:
+        try:
+            vol = float(r["入荷量t"] or 0)
+            price = float(r["中値円"] or 0)
+            max_vol = max(max_vol, vol)
+            max_price = max(max_price, price)
+        except (ValueError, TypeError):
+            pass
+    return {"vol": max_vol, "price": max_price}
+
+
+# ── プロンプト ──────────────────────────────────────────────────────────────
 
 def build_market_summary(items):
     lines = []
@@ -62,174 +121,175 @@ def build_market_summary(items):
 
 
 def build_comment(items):
-    # コメントは品目ごとに同一なので最初の1件から取得
     for r in items:
         if r.get("コメント"):
-            # 最初の段落だけ（長すぎるため）
             text = r["コメント"].strip()
-            return text[:600] + ("…" if len(text) > 600 else "")
+            return text[:400] + ("…" if len(text) > 400 else "")
     return ""
 
 
-# ── LLMキャッシュ ────────────────────────────────────────────────────────────
+# ── キャッシュ ──────────────────────────────────────────────────────────────
 
-def _recipe_cache_path(week):
+def _cache_path(week):
     os.makedirs(".cache", exist_ok=True)
     safe = re.sub(r"[^\w]", "_", week)
     return f".cache/recipe_{safe}.json"
 
-def load_recipe_cache(week):
-    path = _recipe_cache_path(week)
+
+def load_cache(week):
+    path = _cache_path(week)
     if os.path.exists(path):
-        import json
         with open(path, encoding="utf-8") as f:
             return json.load(f)
     return None
 
-def save_recipe_cache(week, text):
-    import json
-    path = _recipe_cache_path(week)
+
+def save_cache(week, data):
+    path = _cache_path(week)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump({"week": week, "text": text}, f, ensure_ascii=False)
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-# ── Claude API呼び出し ───────────────────────────────────────────────────────
+# ── LLM呼び出し ──────────────────────────────────────────────────────────────
 
-SYSTEM_PROMPT = """\
-あなたは青果市場の専門家であり、料理研究家です。
-東京都中央卸売市場の週間市況データをもとに、消費者向けに
-「今週お買い得な果実のおすすめランク」と「簡単レシピ」を提案してください。
-
-出力は以下のJSON形式で返してください（コードブロック不要、純粋なJSONのみ）:
-{
-  "week": "週の表示",
-  "ranking": [
-    {
-      "rank": 1,
-      "item": "品目名",
-      "reason": "おすすめ理由（価格・入荷量・旬の観点から50字以内）",
-      "score": 85
-    }
-  ],
-  "recipes": [
-    {
-      "item": "品目名",
-      "title": "レシピ名",
-      "time_min": 15,
-      "servings": 2,
-      "ingredients": ["材料1", "材料2"],
-      "steps": ["手順1", "手順2", "手順3"]
-    }
-  ],
-  "market_comment": "今週の市況を一言でまとめたコメント（100字以内）"
-}
-
-おすすめランクは上位5品目、レシピは上位3品目について各1品提案してください。
-スコア(score)は100点満点で、低価格・入荷量多・旬の組み合わせで評価してください。"""
-
-
-def generate(items, week):
-    cached = load_recipe_cache(week)
-    if cached:
-        print(f"キャッシュヒット: {week}")
-        return cached["text"], None
-
-    summary = build_market_summary(items)
-    comment = build_comment(items)
-
-    user_message = f"""\
-## {week} 果実市況データ
-
-### 品目別データ（品目: 入荷量/前週比/中値）
-{summary}
-
-### 概況コメント
-{comment}
-
-上記データをもとに、おすすめランクとレシピを生成してください。
-中値が空欄の品目は価格不明として扱い、入荷量・前週比・旬で評価してください。"""
-
+def generate_recipe_and_comment(market_summary, top_items, market_comment):
+    """Claude API でレシピとコメントを生成（キャッシュ可能）"""
     client = anthropic.Anthropic()
 
-    with client.messages.stream(
+    system_prompt = """あなたは青果マーケティングのプロです。
+市況データをもとに、消費者向けのコメントと簡単レシピを生成します。"""
+
+    items_str = "\n".join(f"- {item}: {score}点" for item, score in top_items)
+
+    user_message = f"""以下は今週のおすすめ果実トップ5です：
+
+{items_str}
+
+市況コメント（参考）：
+{market_comment or "特にコメントなし"}
+
+この情報をもとに、以下の JSON を生成してください：
+{{
+  "market_comment": "消費者向けの簡潔な市況説明（1～2文）",
+  "recipes": [
+    {{
+      "title": "レシピ名",
+      "item": "対象果実",
+      "time_min": 調理時間分,
+      "servings": "○人分",
+      "ingredients": ["材料1", "材料2"],
+      "steps": ["手順1", "手順2"]
+    }}
+  ]
+}}
+
+レシピは上位3品目分（簡潔に）を生成してください。"""
+
+    response = client.messages.create(
         model="claude-opus-4-7",
-        max_tokens=4096,
-        thinking={"type": "adaptive"},
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_message}],
-    ) as stream:
-        print("生成中...", flush=True)
-        response = stream.get_final_message()
-
-    text = next(
-        (b.text for b in response.content if b.type == "text"), ""
+        max_tokens=1500,
+        system=system_prompt,
+        messages=[{"role": "user", "content": user_message}]
     )
-    save_recipe_cache(week, text)
-    return text, response.usage
+
+    text = response.content[0].text
+    json_match = text.find('{')
+    json_end = text.rfind('}') + 1
+    if json_match >= 0 and json_end > json_match:
+        try:
+            return json.loads(text[json_match:json_end])
+        except json.JSONDecodeError:
+            return {"market_comment": "レシピ生成エラー", "recipes": []}
+    return {"market_comment": "レシピ生成エラー", "recipes": []}
 
 
-# ── 出力 ────────────────────────────────────────────────────────────────────
+# ── メイン ──────────────────────────────────────────────────────────────────
 
-def print_result(text, week):
-    import json
-
-    # JSON抽出（```json ... ``` ブロックに包まれている場合も対応）
-    m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
-    json_str = m.group(1) if m else text.strip()
-
-    try:
-        data = json.loads(json_str)
-    except json.JSONDecodeError:
-        print("⚠️ JSON解析エラー。生テキストを出力します。")
-        print(text)
-        return
-
-    print(f"\n{'='*60}")
-    print(f"🍊 {data.get('week', week)} おすすめ果実ランキング")
-    print(f"{'='*60}")
-    print(f"📢 市況: {data.get('market_comment', '')}\n")
-
-    print("【おすすめランキング TOP5】")
-    for r in data.get("ranking", []):
-        bar = "★" * (r["score"] // 20) + "☆" * (5 - r["score"] // 20)
-        print(f"  {r['rank']}位 {r['item']:12s} {bar} ({r['score']}点)")
-        print(f"       {r['reason']}")
-    print()
-
-    print("【簡単レシピ】")
-    for recipe in data.get("recipes", []):
-        print(f"\n  🍽️  {recipe['title']} ({recipe['item']})")
-        print(f"      調理時間: {recipe['time_min']}分 / {recipe['servings']}人分")
-        print(f"      材料: {', '.join(recipe['ingredients'])}")
-        print("      作り方:")
-        for i, step in enumerate(recipe["steps"], 1):
-            print(f"        {i}. {step}")
-
-    # JSONファイルにも保存
-    import datetime
-    outfile = f"recipes_{datetime.date.today().strftime('%Y%m%d')}.json"
-    with open(outfile, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f"\n✅ JSONを保存: {outfile}")
-
-
-# ── main ─────────────────────────────────────────────────────────────────────
-
-if __name__ == "__main__":
+def main():
+    rules = load_ranking_rules()
     csvfile = get_latest_csv()
-    print(f"CSVファイル: {csvfile}")
-
     items, week = load_latest_week(csvfile)
-    if not items:
-        print("有効な市況データが見つかりません。")
+
+    if not items or not week:
+        print("❌ 市況データが見つかりません。")
         sys.exit(1)
 
+    print(f"CSVファイル: {csvfile}")
     print(f"週: {week}  品目数: {len(items)}")
 
-    text, usage = generate(items, week)
+    # キャッシュを確認
+    cached = load_cache(week)
+    if cached:
+        print("✓ キャッシュから読み込みました（API呼び出しなし）")
+        result = {
+            "week": week,
+            "ranking": cached.get("ranking", []),
+            "market_comment": cached.get("market_comment", ""),
+            "recipes": cached.get("recipes", [])
+        }
+    else:
+        # ランキングを計算（API不要）
+        print("計算中...")
+        max_values = calc_max_values(items)
+        scores = []
+        for item in items:
+            score = calculate_score(item, rules, max_values)
+            scores.append((item["品目"], score, item))
 
-    if usage:
-        print(f"トークン使用: input={usage.input_tokens} output={usage.output_tokens} "
-              f"cache_read={usage.cache_read_input_tokens}")
+        scores.sort(key=lambda x: x[1], reverse=True)
+        ranking = [
+            {
+                "rank": i + 1,
+                "item": name,
+                "score": score,
+                "reason": f"入荷量{r['入荷量t']}t、中値{r['中値円']}円"
+            }
+            for i, (name, score, r) in enumerate(scores[:5])
+        ]
 
-    print_result(text, week)
+        # Claude API でレシピ・コメント生成
+        print("レシピ・コメント生成中...")
+        top_items = [(name, score) for name, score, _ in scores[:3]]
+        market_comment = build_comment(items)
+        recipe_data = generate_recipe_and_comment("", top_items, market_comment)
+
+        result = {
+            "week": week,
+            "ranking": ranking,
+            "market_comment": recipe_data.get("market_comment", ""),
+            "recipes": recipe_data.get("recipes", [])
+        }
+
+        # キャッシュに保存
+        save_cache(week, result)
+        print("✓ キャッシュに保存しました。")
+
+    # 出力
+    print("\n" + "=" * 60)
+    print(f"🍊 {week} おすすめ果実ランキング")
+    print("=" * 60)
+    print(f"📢 市況: {result['market_comment']}\n")
+    print("【おすすめランキング】")
+    for r in result["ranking"]:
+        stars = "★" * (r["score"] // 20) + "☆" * (5 - r["score"] // 20)
+        print(f"  {r['rank']}位 {r['item']:10s} {stars} ({r['score']}点)")
+
+    # レシピ出力
+    if result["recipes"]:
+        print("\n【簡単レシピ】")
+        for recipe in result["recipes"]:
+            print(f"\n  🍽️  {recipe['title']} ({recipe['item']})")
+            print(f"      調理時間: {recipe['time_min']}分 / {recipe['servings']}")
+
+    # JSON 保存
+    out_path = f"recipes_{week.replace('年', '').replace('第', '').replace('週', '')}.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+    print(f"\n✓ JSON出力: {out_path}")
+
+    # トークン使用量表示
+    print(f"✓ API呼び出し: キャッシュからの読み込み" if cached else "✓ API呼び出し: 新規生成")
+
+
+if __name__ == "__main__":
+    main()
