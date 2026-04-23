@@ -66,21 +66,27 @@ def load_market_data():
 
 
 def load_recipe_cache(week):
+    # recommend_recipes.py と同じキー生成ロジック
     safe = re.sub(r"[^\w]", "_", week)
-    path = os.path.join(BASE, f".cache/recipe_{safe}.json")
-    if not os.path.exists(path):
-        return None
-    with open(path, encoding="utf-8") as f:
-        data = json.load(f)
-    if isinstance(data, dict) and "ranking" in data:
-        return data
-    text = data.get("text", "")
-    m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
-    json_str = m.group(1) if m else text.strip()
-    try:
-        return json.loads(json_str)
-    except json.JSONDecodeError:
-        return None
+    candidates = [
+        os.path.join(BASE, f".cache/recipe_{week}.json"),   # 日本語そのまま
+        os.path.join(BASE, f".cache/recipe_{safe}.json"),   # 記号→_
+    ]
+    for path in candidates:
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict) and "ranking" in data:
+            return data
+        text = data.get("text", "")
+        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+        json_str = m.group(1) if m else text.strip()
+        try:
+            return json.loads(json_str)
+        except json.JSONDecodeError:
+            return None
+    return None
 
 
 # ── HTML部品 ──────────────────────────────────────────────────────────────────
