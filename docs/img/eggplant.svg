@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- なす: 細長い濃紫の実 -->
+  <path d="M42 22 Q30 35 28 58 Q28 80 42 88 Q52 93 60 86 Q72 76 72 56 Q72 34 60 22 Q52 16 42 22Z" fill="#4a148c"/>
+  <path d="M44 24 Q33 37 31 58 Q31 78 44 86 Q53 91 60 84 Q70 74 70 56 Q70 36 60 24 Q53 18 44 24Z" fill="#7b1fa2"/>
+  <!-- ハイライト -->
+  <ellipse cx="44" cy="44" rx="8" ry="14" fill="#9c27b0" opacity="0.5"/>
+  <!-- へた（緑のガク） -->
+  <path d="M44 24 Q40 14 36 10 Q44 8 50 14" fill="#2e7d32"/>
+  <path d="M58 24 Q62 14 66 10 Q58 8 52 14" fill="#2e7d32"/>
+  <rect x="44" y="10" width="12" height="14" rx="4" fill="#388e3c"/>
+  <!-- 茎 -->
+  <rect x="47" y="5" width="6" height="8" rx="2" fill="#1b5e20"/>
+</svg>

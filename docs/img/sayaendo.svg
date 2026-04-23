@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- さやえんどう: 平たい緑のさや -->
+  <path d="M15 58 Q50 30 85 52" stroke="#43a047" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <path d="M15 58 Q50 30 85 52" stroke="#66bb6a" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <!-- さやの縫い目 -->
+  <path d="M15 58 Q50 36 85 52" stroke="#388e3c" stroke-width="1.5" fill="none"/>
+  <!-- 豆の膨らみ（うっすら） -->
+  <ellipse cx="35" cy="50" rx="7" ry="5" fill="#81c784" opacity="0.6" transform="rotate(-20 35 50)"/>
+  <ellipse cx="50" cy="43" rx="7" ry="5" fill="#81c784" opacity="0.6" transform="rotate(-15 50 43)"/>
+  <ellipse cx="65" cy="46" rx="7" ry="5" fill="#81c784" opacity="0.6" transform="rotate(-10 65 46)"/>
+  <!-- へた -->
+  <path d="M15 58 Q10 50 12 42" stroke="#2e7d32" stroke-width="2" fill="none"/>
+</svg>

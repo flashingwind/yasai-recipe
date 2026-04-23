@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- こまつな: 束になった濃緑の葉野菜 -->
+  <!-- 茎 -->
+  <rect x="44" y="60" width="12" height="28" rx="4" fill="#a5d6a7"/>
+  <!-- 葉 -->
+  <ellipse cx="30" cy="50" rx="18" ry="9" fill="#2e7d32" transform="rotate(-30 30 50)"/>
+  <ellipse cx="50" cy="38" rx="18" ry="9" fill="#388e3c"/>
+  <ellipse cx="70" cy="50" rx="18" ry="9" fill="#2e7d32" transform="rotate(30 70 50)"/>
+  <ellipse cx="36" cy="62" rx="15" ry="8" fill="#43a047" transform="rotate(-15 36 62)"/>
+  <ellipse cx="64" cy="62" rx="15" ry="8" fill="#43a047" transform="rotate(15 64 62)"/>
+  <!-- 葉脈 -->
+  <line x1="30" y1="45" x2="30" y2="55" stroke="#1b5e20" stroke-width="1" opacity="0.5"/>
+  <line x1="50" y1="34" x2="50" y2="44" stroke="#1b5e20" stroke-width="1" opacity="0.5"/>
+</svg>

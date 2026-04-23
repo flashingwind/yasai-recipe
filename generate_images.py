@@ -90,8 +90,9 @@ print(f"対象品目: {len(targets)}品目")
 
 for name, (filename, description) in targets.items():
     path = os.path.join(OUT, f"{filename}.png")
-    if os.path.exists(path):
-        print(f"  skip {filename}.png")
+    svg_path = os.path.join(OUT, f"{filename}.svg")
+    if os.path.exists(path) or os.path.exists(svg_path):
+        print(f"  skip {filename} (already exists)")
         continue
 
     print(f"  生成中: {name}...", flush=True)

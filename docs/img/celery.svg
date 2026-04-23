@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- セルリー: 薄緑の肉厚な茎 -->
+  <!-- 葉 -->
+  <path d="M32 28 Q22 16 20 8" stroke="#558b2f" stroke-width="2" fill="none"/>
+  <ellipse cx="18" cy="7" rx="8" ry="4" fill="#66bb6a" transform="rotate(-30 18 7)"/>
+  <path d="M50 22 Q50 10 50 5" stroke="#558b2f" stroke-width="2" fill="none"/>
+  <ellipse cx="50" cy="4" rx="8" ry="4" fill="#66bb6a"/>
+  <path d="M68 28 Q78 16 80 8" stroke="#558b2f" stroke-width="2" fill="none"/>
+  <ellipse cx="82" cy="7" rx="8" ry="4" fill="#66bb6a" transform="rotate(30 82 7)"/>
+  <!-- 茎（断面がC字形の肉厚な茎） -->
+  <path d="M26 30 Q22 55 24 82" stroke="#a5d6a7" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <path d="M50 24 Q50 55 50 84" stroke="#b2dfdb" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <path d="M74 30 Q78 55 76 82" stroke="#a5d6a7" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <!-- 茎の溝（中心線） -->
+  <path d="M26 30 Q22 55 24 82" stroke="#80cbc4" stroke-width="2" fill="none"/>
+  <path d="M50 24 Q50 55 50 84" stroke="#80cbc4" stroke-width="2" fill="none"/>
+  <path d="M74 30 Q78 55 76 82" stroke="#80cbc4" stroke-width="2" fill="none"/>
+  <!-- 根元 -->
+  <ellipse cx="50" cy="84" rx="28" ry="6" fill="#80cbc4" opacity="0.5"/>
+</svg>

@@ -63,7 +63,12 @@ FALLBACK_IMG = ("fallback", "#f5f5f0")
 
 def veggie_visual(name):
     filename, bg = VEGGIE_IMG.get(name, FALLBACK_IMG)
-    path = f"img/{filename}.png"
+    # SVGがあればSVGを、なければPNGを参照
+    svg_path = os.path.join(DOCS, "img", f"{filename}.svg")
+    if os.path.exists(svg_path):
+        path = f"img/{filename}.svg"
+    else:
+        path = f"img/{filename}.png"
     return path, bg
 
 

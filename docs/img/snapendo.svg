@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- スナップえんどう: 丸みのある太いさや -->
+  <path d="M14 60 Q16 36 50 28 Q84 36 86 60 Q84 76 50 80 Q16 76 14 60Z" fill="#558b2f"/>
+  <path d="M16 60 Q18 38 50 31 Q82 38 84 60 Q82 74 50 77 Q18 74 16 60Z" fill="#7cb342"/>
+  <!-- さやの縫い目 -->
+  <path d="M14 60 Q50 56 86 60" stroke="#33691e" stroke-width="1.5" fill="none"/>
+  <!-- 豆の膨らみ（スナップは豆が大きい） -->
+  <ellipse cx="28" cy="56" rx="10" ry="11" fill="#8bc34a"/>
+  <ellipse cx="50" cy="54" rx="10" ry="11" fill="#8bc34a"/>
+  <ellipse cx="72" cy="56" rx="10" ry="11" fill="#8bc34a"/>
+  <!-- へた -->
+  <path d="M14 60 Q8 52 10 44" stroke="#2e7d32" stroke-width="2" fill="none"/>
+</svg>

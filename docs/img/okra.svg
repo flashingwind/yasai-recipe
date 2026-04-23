@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- オクラ: 緑の5稜形のさや -->
+  <!-- オクラの断面的な形（5角形ぽい） -->
+  <path d="M50 10 Q58 30 62 55 Q56 78 50 88 Q44 78 38 55 Q42 30 50 10Z" fill="#4caf50"/>
+  <!-- 5つの稜（ridge） -->
+  <path d="M50 10 Q44 30 38 55" stroke="#388e3c" stroke-width="1.5" fill="none"/>
+  <path d="M50 10 Q56 30 62 55" stroke="#388e3c" stroke-width="1.5" fill="none"/>
+  <path d="M50 10 Q48 30 40 52" stroke="#388e3c" stroke-width="1.5" fill="none"/>
+  <path d="M50 10 Q52 30 60 52" stroke="#388e3c" stroke-width="1.5" fill="none"/>
+  <!-- ガク（星形） -->
+  <path d="M50 12 L44 20 L50 16 L56 20Z" fill="#2e7d32"/>
+  <path d="M50 12 L38 16 L44 20 L50 12Z" fill="#33691e"/>
+  <path d="M50 12 L62 16 L56 20 L50 12Z" fill="#33691e"/>
+  <!-- 茎 -->
+  <rect x="46" y="4" width="8" height="10" rx="3" fill="#1b5e20"/>
+</svg>

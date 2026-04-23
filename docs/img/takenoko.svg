@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- たけのこ: 薄黄色の円錐形 -->
+  <path d="M38 88 Q30 60 38 20 Q50 10 62 20 Q70 60 62 88Z" fill="#f9a825"/>
+  <path d="M40 88 Q33 62 40 24 Q50 14 60 24 Q67 62 60 88Z" fill="#fdd835"/>
+  <!-- 皮の節 -->
+  <path d="M38 75 Q50 72 62 75" stroke="#f57f17" stroke-width="2.5" fill="none"/>
+  <path d="M37 62 Q50 58 63 62" stroke="#f57f17" stroke-width="2.5" fill="none"/>
+  <path d="M37 50 Q50 46 63 50" stroke="#f57f17" stroke-width="2.5" fill="none"/>
+  <path d="M38 38 Q50 34 62 38" stroke="#f57f17" stroke-width="2.5" fill="none"/>
+  <!-- 皮の外葉 -->
+  <path d="M38 62 Q28 55 22 42 Q32 40 38 50" fill="#8d6e63" opacity="0.7"/>
+  <path d="M62 62 Q72 55 78 42 Q68 40 62 50" fill="#8d6e63" opacity="0.7"/>
+</svg>

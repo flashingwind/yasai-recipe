@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- ゴーヤ（にがうり）: 緑のイボだらけの細長い実 -->
+  <path d="M14 54 Q14 34 50 28 Q86 34 86 54 Q86 74 50 78 Q14 74 14 54Z" fill="#388e3c"/>
+  <path d="M16 54 Q16 36 50 31 Q84 36 84 54 Q84 72 50 75 Q16 72 16 54Z" fill="#43a047"/>
+  <!-- イボ（ゴーヤ特有） -->
+  <ellipse cx="26" cy="46" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="36" cy="38" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="50" cy="35" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="64" cy="38" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="74" cy="46" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="30" cy="62" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="44" cy="68" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="58" cy="67" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="72" cy="62" rx="7" ry="4" fill="#558b2f"/>
+  <ellipse cx="43" cy="51" rx="7" ry="4" fill="#66bb6a" opacity="0.6"/>
+  <ellipse cx="57" cy="48" rx="7" ry="4" fill="#66bb6a" opacity="0.6"/>
+  <!-- へた -->
+  <path d="M14 54 Q8 46 10 38" stroke="#2e7d32" stroke-width="2.5" fill="none"/>
+</svg>

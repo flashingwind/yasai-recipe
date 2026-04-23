@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- かぼちゃ: 濃緑の扁平な南瓜 -->
+  <ellipse cx="50" cy="58" rx="38" ry="28" fill="#388e3c"/>
+  <!-- 縦の溝 -->
+  <path d="M50 30 Q45 58 50 86" stroke="#2e7d32" stroke-width="2" fill="none"/>
+  <path d="M36 32 Q33 58 36 84" stroke="#2e7d32" stroke-width="2" fill="none"/>
+  <path d="M64 32 Q67 58 64 84" stroke="#2e7d32" stroke-width="2" fill="none"/>
+  <path d="M24 44 Q23 58 24 72" stroke="#2e7d32" stroke-width="2" fill="none"/>
+  <path d="M76 44 Q77 58 76 72" stroke="#2e7d32" stroke-width="2" fill="none"/>
+  <!-- ヘタ -->
+  <rect x="46" y="24" width="8" height="12" rx="3" fill="#5d4037"/>
+  <!-- ハイライト -->
+  <ellipse cx="35" cy="48" rx="8" ry="5" fill="#43a047" opacity="0.5"/>
+</svg>

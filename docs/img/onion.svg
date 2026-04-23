@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- たまねぎ: 茶色の球根 -->
+  <ellipse cx="50" cy="60" rx="32" ry="28" fill="#e65100"/>
+  <ellipse cx="50" cy="58" rx="30" ry="26" fill="#ef6c00"/>
+  <!-- 縦の皮目 -->
+  <path d="M50 32 Q44 58 50 86" stroke="#bf360c" stroke-width="1.5" fill="none"/>
+  <path d="M35 36 Q30 58 36 84" stroke="#bf360c" stroke-width="1" fill="none"/>
+  <path d="M65 36 Q70 58 64 84" stroke="#bf360c" stroke-width="1" fill="none"/>
+  <!-- ハイライト -->
+  <ellipse cx="38" cy="48" rx="8" ry="6" fill="#fb8c00" opacity="0.5"/>
+  <!-- 根盤 -->
+  <ellipse cx="50" cy="86" rx="12" ry="4" fill="#bf360c"/>
+  <!-- 芽 -->
+  <path d="M50 32 Q46 22 48 14" stroke="#33691e" stroke-width="2" fill="none"/>
+  <path d="M50 32 Q54 22 52 14" stroke="#33691e" stroke-width="2" fill="none"/>
+</svg>

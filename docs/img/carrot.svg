@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- にんじん: オレンジの根と緑の葉 -->
+  <!-- 葉 -->
+  <path d="M44 22 Q36 10 30 4" stroke="#388e3c" stroke-width="2" fill="none"/>
+  <path d="M48 20 Q46 8 46 2" stroke="#388e3c" stroke-width="2" fill="none"/>
+  <path d="M52 20 Q54 8 54 2" stroke="#388e3c" stroke-width="2" fill="none"/>
+  <path d="M56 22 Q64 10 70 4" stroke="#388e3c" stroke-width="2" fill="none"/>
+  <ellipse cx="28" cy="3" rx="6" ry="3" fill="#4caf50" transform="rotate(-40 28 3)"/>
+  <ellipse cx="46" cy="1" rx="5" ry="3" fill="#4caf50"/>
+  <ellipse cx="54" cy="1" rx="5" ry="3" fill="#4caf50"/>
+  <ellipse cx="72" cy="3" rx="6" ry="3" fill="#4caf50" transform="rotate(40 72 3)"/>
+  <!-- 根（三角形に近い） -->
+  <path d="M36 22 Q30 55 46 90 Q50 96 54 90 Q70 55 64 22Z" fill="#e64a19"/>
+  <path d="M38 23 Q32 55 47 89 Q50 94 53 89 Q68 55 62 23Z" fill="#ff7043"/>
+  <!-- 横線（段差） -->
+  <path d="M37 40 Q50 37 63 40" stroke="#e64a19" stroke-width="1.5" fill="none"/>
+  <path d="M36 58 Q50 55 64 58" stroke="#e64a19" stroke-width="1.5" fill="none"/>
+  <path d="M38 74 Q50 71 62 74" stroke="#e64a19" stroke-width="1.5" fill="none"/>
+  <!-- 細根 -->
+  <line x1="44" y1="65" x2="36" y2="70" stroke="#e64a19" stroke-width="1"/>
+  <line x1="56" y1="55" x2="64" y2="60" stroke="#e64a19" stroke-width="1"/>
+</svg>

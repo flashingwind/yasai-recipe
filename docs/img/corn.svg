@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- とうもろこし: 黄色い実と緑の皮 -->
+  <!-- 緑の皮 -->
+  <path d="M30 80 Q20 50 35 20 Q42 15 50 18" fill="#43a047"/>
+  <path d="M70 80 Q80 50 65 20 Q58 15 50 18" fill="#388e3c"/>
+  <!-- 実（黄色の楕円） -->
+  <rect x="36" y="22" width="28" height="56" rx="14" fill="#f9a825"/>
+  <!-- 粒の格子 -->
+  <line x1="36" y1="32" x2="64" y2="32" stroke="#f57f17" stroke-width="1"/>
+  <line x1="36" y1="40" x2="64" y2="40" stroke="#f57f17" stroke-width="1"/>
+  <line x1="36" y1="48" x2="64" y2="48" stroke="#f57f17" stroke-width="1"/>
+  <line x1="36" y1="56" x2="64" y2="56" stroke="#f57f17" stroke-width="1"/>
+  <line x1="36" y1="64" x2="64" y2="64" stroke="#f57f17" stroke-width="1"/>
+  <line x1="44" y1="22" x2="44" y2="78" stroke="#f57f17" stroke-width="1"/>
+  <line x1="50" y1="22" x2="50" y2="78" stroke="#f57f17" stroke-width="1"/>
+  <line x1="56" y1="22" x2="56" y2="78" stroke="#f57f17" stroke-width="1"/>
+  <!-- ひげ -->
+  <path d="M50 22 Q58 14 62 8" stroke="#a5d6a7" stroke-width="1.5" fill="none"/>
+  <path d="M50 22 Q54 12 55 6" stroke="#a5d6a7" stroke-width="1.5" fill="none"/>
+  <path d="M50 22 Q46 12 44 6" stroke="#a5d6a7" stroke-width="1.5" fill="none"/>
+</svg>

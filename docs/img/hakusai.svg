@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- はくさい: 白菜の断面的な形 -->
+  <!-- 外葉（緑） -->
+  <path d="M50 88 Q20 70 18 42 Q20 22 50 14 Q80 22 82 42 Q80 70 50 88Z" fill="#66bb6a"/>
+  <!-- 中葉（薄緑） -->
+  <path d="M50 88 Q26 72 26 46 Q28 28 50 20 Q72 28 74 46 Q74 72 50 88Z" fill="#a5d6a7"/>
+  <!-- 内葉（薄黄緑） -->
+  <path d="M50 88 Q34 74 34 50 Q36 34 50 27 Q64 34 66 50 Q66 74 50 88Z" fill="#dcedc8"/>
+  <!-- 芯（白） -->
+  <path d="M50 88 Q42 76 42 54 Q44 40 50 34 Q56 40 58 54 Q58 76 50 88Z" fill="#f9fbe7"/>
+  <!-- 葉脈 -->
+  <line x1="50" y1="34" x2="50" y2="88" stroke="#aed581" stroke-width="2"/>
+  <path d="M50 55 Q40 52 35 46" stroke="#aed581" stroke-width="1" fill="none"/>
+  <path d="M50 55 Q60 52 65 46" stroke="#aed581" stroke-width="1" fill="none"/>
+</svg>

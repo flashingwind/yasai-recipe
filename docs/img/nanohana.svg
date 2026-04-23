@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- なのはな: 黄色い菜の花 -->
+  <!-- 茎と葉 -->
+  <line x1="50" y1="90" x2="50" y2="42" stroke="#558b2f" stroke-width="3"/>
+  <path d="M50 72 Q36 68 28 58" stroke="#558b2f" stroke-width="2" fill="none"/>
+  <ellipse cx="26" cy="56" rx="10" ry="6" fill="#66bb6a" transform="rotate(-20 26 56)"/>
+  <path d="M50 60 Q64 56 72 46" stroke="#558b2f" stroke-width="2" fill="none"/>
+  <ellipse cx="74" cy="44" rx="10" ry="6" fill="#66bb6a" transform="rotate(20 74 44)"/>
+  <!-- 花 -->
+  <circle cx="50" cy="30" r="5" fill="#fdd835"/>
+  <!-- 花びら（4枚、菜の花） -->
+  <ellipse cx="50" cy="18" rx="6" ry="8" fill="#ffee58"/>
+  <ellipse cx="50" cy="42" rx="6" ry="8" fill="#ffee58"/>
+  <ellipse cx="38" cy="30" rx="8" ry="6" fill="#ffee58"/>
+  <ellipse cx="62" cy="30" rx="8" ry="6" fill="#ffee58"/>
+  <!-- 中心 -->
+  <circle cx="50" cy="30" r="5" fill="#f9a825"/>
+  <circle cx="50" cy="30" r="3" fill="#f57f17"/>
+</svg>

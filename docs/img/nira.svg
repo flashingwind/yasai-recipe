@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- にら: 細長い平らな緑の葉 -->
+  <path d="M35 90 Q32 55 36 15" stroke="#2e7d32" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M44 90 Q44 52 46 12" stroke="#388e3c" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M53 90 Q55 53 56 13" stroke="#43a047" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M62 90 Q67 55 66 16" stroke="#388e3c" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- 葉脈 -->
+  <path d="M35 70 Q32 45 36 25" stroke="#1b5e20" stroke-width="1.5" fill="none"/>
+  <path d="M53 68 Q55 44 56 24" stroke="#1b5e20" stroke-width="1.5" fill="none"/>
+  <!-- 根元をまとめる -->
+  <ellipse cx="49" cy="88" rx="20" ry="5" fill="#1b5e20" opacity="0.4"/>
+</svg>

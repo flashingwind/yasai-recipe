@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- ピーマン: 緑のピーマン（正面） -->
+  <!-- 4室のピーマン形状 -->
+  <path d="M50 22 Q30 24 26 48 Q24 68 36 82 Q44 90 50 88 Q56 90 64 82 Q76 68 74 48 Q70 24 50 22Z" fill="#2e7d32"/>
+  <path d="M50 24 Q32 26 28 50 Q26 68 38 81 Q45 88 50 86 Q55 88 62 81 Q74 68 72 50 Q68 26 50 24Z" fill="#43a047"/>
+  <!-- 縦の溝（4つの室の境） -->
+  <path d="M50 24 Q48 56 50 87" stroke="#1b5e20" stroke-width="2" fill="none"/>
+  <path d="M40 26 Q34 54 38 84" stroke="#1b5e20" stroke-width="1.5" fill="none"/>
+  <path d="M60 26 Q66 54 62 84" stroke="#1b5e20" stroke-width="1.5" fill="none"/>
+  <!-- ハイライト -->
+  <ellipse cx="38" cy="44" rx="8" ry="12" fill="#66bb6a" opacity="0.5"/>
+  <!-- へた -->
+  <rect x="46" y="15" width="8" height="10" rx="3" fill="#1b5e20"/>
+  <path d="M50 15 L44 8" stroke="#2e7d32" stroke-width="2"/>
+  <path d="M50 15 L56 8" stroke="#2e7d32" stroke-width="2"/>
+</svg>

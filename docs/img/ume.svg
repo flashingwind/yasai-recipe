@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- うめ: 緑の梅の実 -->
+  <circle cx="50" cy="54" r="28" fill="#9ccc65"/>
+  <circle cx="50" cy="52" r="26" fill="#aed581"/>
+  <!-- 縦筋（梅のへそ） -->
+  <path d="M50 28 Q48 52 50 78" stroke="#7cb342" stroke-width="1.5" fill="none"/>
+  <!-- へた -->
+  <line x1="50" y1="26" x2="50" y2="16" stroke="#558b2f" stroke-width="2.5"/>
+  <ellipse cx="50" cy="15" rx="4" ry="2" fill="#558b2f" transform="rotate(-20 50 15)"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- ふき: 緑の太い茎（フキの茎を横から） -->
+  <!-- 茎3本を束にして斜めに -->
+  <rect x="18" y="38" width="14" height="48" rx="6" fill="#558b2f" transform="rotate(-5 25 62)"/>
+  <rect x="20" y="38" width="10" height="48" rx="5" fill="#7cb342" transform="rotate(-5 25 62)"/>
+  <rect x="36" y="34" width="14" height="52" rx="6" fill="#4caf50" transform="rotate(0 43 60)"/>
+  <rect x="38" y="34" width="10" height="52" rx="5" fill="#66bb6a" transform="rotate(0 43 60)"/>
+  <rect x="54" y="36" width="14" height="50" rx="6" fill="#558b2f" transform="rotate(5 61 61)"/>
+  <rect x="56" y="36" width="10" height="50" rx="5" fill="#7cb342" transform="rotate(5 61 61)"/>
+  <!-- 節 -->
+  <line x1="18" y1="58" x2="32" y2="58" stroke="#33691e" stroke-width="2"/>
+  <line x1="36" y1="56" x2="50" y2="56" stroke="#33691e" stroke-width="2"/>
+  <line x1="54" y1="57" x2="68" y2="57" stroke="#33691e" stroke-width="2"/>
+  <!-- 切り口（上端） -->
+  <ellipse cx="25" cy="38" rx="7" ry="4" fill="#a5d6a7" transform="rotate(-5 25 38)"/>
+  <ellipse cx="43" cy="34" rx="7" ry="4" fill="#a5d6a7"/>
+  <ellipse cx="61" cy="36" rx="7" ry="4" fill="#a5d6a7" transform="rotate(5 61 36)"/>
+</svg>

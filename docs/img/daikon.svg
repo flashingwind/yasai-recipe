@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- だいこん: 長い白い根と緑の葉 -->
+  <!-- 根（白） -->
+  <path d="M40 35 Q38 65 44 88 Q50 95 56 88 Q62 65 60 35Z" fill="#eeeeee"/>
+  <path d="M42 36 Q40 65 46 87 Q50 93 54 87 Q60 65 58 36Z" fill="#f5f5f5"/>
+  <!-- 細根 -->
+  <line x1="46" y1="60" x2="38" y2="65" stroke="#bdbdbd" stroke-width="1"/>
+  <line x1="54" y1="72" x2="62" y2="77" stroke="#bdbdbd" stroke-width="1"/>
+  <line x1="52" y1="50" x2="60" y2="54" stroke="#bdbdbd" stroke-width="1"/>
+  <!-- 葉 -->
+  <path d="M44 38 Q32 24 26 12" stroke="#388e3c" stroke-width="3" fill="none"/>
+  <path d="M50 35 Q50 18 50 8" stroke="#388e3c" stroke-width="3" fill="none"/>
+  <path d="M56 38 Q68 24 74 12" stroke="#388e3c" stroke-width="3" fill="none"/>
+  <ellipse cx="24" cy="11" rx="7" ry="3.5" fill="#4caf50" transform="rotate(-40 24 11)"/>
+  <ellipse cx="50" cy="7" rx="7" ry="3.5" fill="#4caf50"/>
+  <ellipse cx="76" cy="11" rx="7" ry="3.5" fill="#4caf50" transform="rotate(40 76 11)"/>
+</svg>

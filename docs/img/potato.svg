@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- じゃがいも: 茶色の不整形な楕円 -->
+  <path d="M20 55 Q18 38 28 28 Q40 18 55 20 Q72 18 80 32 Q88 46 82 62 Q76 78 60 82 Q42 86 30 76 Q18 68 20 55Z" fill="#a1887f"/>
+  <path d="M22 54 Q20 38 30 30 Q42 20 56 22 Q72 20 79 34 Q86 47 80 62 Q74 77 59 80 Q42 84 31 75 Q20 66 22 54Z" fill="#bcaaa4"/>
+  <!-- 芽の目 -->
+  <circle cx="38" cy="36" r="3" fill="#8d6e63"/>
+  <circle cx="60" cy="30" r="3" fill="#8d6e63"/>
+  <circle cx="70" cy="55" r="3" fill="#8d6e63"/>
+  <circle cx="42" cy="68" r="3" fill="#8d6e63"/>
+</svg>

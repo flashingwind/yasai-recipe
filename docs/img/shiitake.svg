@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- なましいたけ: 茶色い傘と白い柄 -->
+  <!-- 傘（楕円を少し歪めた形） -->
+  <path d="M15 50 Q15 25 50 18 Q85 25 85 50 Q85 62 50 65 Q15 62 15 50Z" fill="#5d4037"/>
+  <path d="M17 50 Q17 28 50 21 Q83 28 83 50 Q83 60 50 63 Q17 60 17 50Z" fill="#795548"/>
+  <!-- ひだ（傘の裏側の雰囲気） -->
+  <ellipse cx="50" cy="63" rx="28" ry="8" fill="#bcaaa4"/>
+  <!-- 柄 -->
+  <rect x="43" y="62" width="14" height="26" rx="5" fill="#d7ccc8"/>
+  <rect x="45" y="63" width="10" height="24" rx="4" fill="#efebe9"/>
+  <!-- 傘上面のひび割れ模様 -->
+  <path d="M30 42 Q40 36 50 40 Q60 36 70 42" stroke="#4e342e" stroke-width="1" fill="none"/>
+  <path d="M24 50 Q37 45 50 48 Q63 45 76 50" stroke="#4e342e" stroke-width="1" fill="none"/>
+</svg>

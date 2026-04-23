@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- レイシ（ライチ）: ピンクのイボ付き丸い実 -->
+  <circle cx="50" cy="54" r="32" fill="#c2185b"/>
+  <circle cx="50" cy="52" r="30" fill="#e91e63"/>
+  <!-- イボ（ライチ特有のでこぼこ皮） -->
+  <circle cx="34" cy="38" r="5" fill="#d81b60"/>
+  <circle cx="50" cy="30" r="5" fill="#d81b60"/>
+  <circle cx="66" cy="38" r="5" fill="#d81b60"/>
+  <circle cx="28" cy="52" r="5" fill="#d81b60"/>
+  <circle cx="72" cy="52" r="5" fill="#d81b60"/>
+  <circle cx="34" cy="66" r="5" fill="#d81b60"/>
+  <circle cx="50" cy="72" r="5" fill="#d81b60"/>
+  <circle cx="66" cy="66" r="5" fill="#d81b60"/>
+  <circle cx="42" cy="44" r="4.5" fill="#f06292" opacity="0.6"/>
+  <circle cx="58" cy="44" r="4.5" fill="#f06292" opacity="0.6"/>
+  <circle cx="50" cy="54" r="4.5" fill="#f06292" opacity="0.5"/>
+  <!-- ハイライト -->
+  <ellipse cx="38" cy="36" rx="8" ry="6" fill="#f48fb1" opacity="0.4"/>
+  <!-- 茎 -->
+  <line x1="50" y1="22" x2="50" y2="14" stroke="#4caf50" stroke-width="2"/>
+  <path d="M50 14 Q44 8 40 6" stroke="#4caf50" stroke-width="2" fill="none"/>
+</svg>

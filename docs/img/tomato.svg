@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- トマト: 赤い丸い実 -->
+  <circle cx="50" cy="56" r="34" fill="#c62828"/>
+  <circle cx="50" cy="54" r="32" fill="#e53935"/>
+  <!-- ハイライト -->
+  <ellipse cx="38" cy="42" rx="10" ry="8" fill="#ef5350" opacity="0.6"/>
+  <!-- ガク（星形の緑） -->
+  <path d="M50 24 L46 30 L50 27 L54 30Z" fill="#2e7d32"/>
+  <path d="M50 24 L38 27 L42 32 L50 24Z" fill="#388e3c"/>
+  <path d="M50 24 L62 27 L58 32 L50 24Z" fill="#388e3c"/>
+  <path d="M50 24 L42 32 L50 28 L58 32Z" fill="#2e7d32"/>
+  <!-- 縦の溝（トマトの溝） -->
+  <path d="M50 24 Q47 56 50 87" stroke="#c62828" stroke-width="1.5" fill="none"/>
+  <path d="M50 24 Q40 56 44 87" stroke="#c62828" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M50 24 Q60 56 56 87" stroke="#c62828" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <!-- 茎 -->
+  <rect x="47" y="18" width="6" height="8" rx="2" fill="#1b5e20"/>
+</svg>

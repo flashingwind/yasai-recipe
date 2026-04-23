@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- まつたけ: 茶色の傘と白い柄 -->
+  <!-- 傘（茶色、半開き） -->
+  <path d="M12 52 Q14 28 50 20 Q86 28 88 52 Q88 60 50 64 Q12 60 12 52Z" fill="#5d4037"/>
+  <path d="M14 52 Q16 30 50 23 Q84 30 86 52 Q86 58 50 62 Q14 58 14 52Z" fill="#795548"/>
+  <!-- 傘の表面（繊維感） -->
+  <path d="M25 44 Q38 39 50 42 Q62 39 75 44" stroke="#4e342e" stroke-width="1.5" fill="none"/>
+  <path d="M18 52 Q34 47 50 50 Q66 47 82 52" stroke="#4e342e" stroke-width="1.5" fill="none"/>
+  <!-- 柄（太くて白っぽい） -->
+  <path d="M40 62 Q38 72 40 88 Q50 94 60 88 Q62 72 60 62Z" fill="#efebe9"/>
+  <path d="M42 63 Q40 72 42 87 Q50 92 58 87 Q60 72 58 63Z" fill="#fafafa"/>
+  <!-- つば（まつたけ特有） -->
+  <ellipse cx="50" cy="68" rx="14" ry="4" fill="#8d6e63"/>
+  <!-- 柄の繊維 -->
+  <line x1="46" y1="68" x2="46" y2="87" stroke="#d7ccc8" stroke-width="1"/>
+  <line x1="50" y1="68" x2="50" y2="87" stroke="#d7ccc8" stroke-width="1"/>
+  <line x1="54" y1="68" x2="54" y2="87" stroke="#d7ccc8" stroke-width="1"/>
+</svg>

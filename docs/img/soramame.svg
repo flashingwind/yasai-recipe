@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- そらまめ: 大きな緑のさや -->
+  <path d="M35 15 Q25 30 24 50 Q23 70 35 85 Q45 92 55 88 Q68 82 74 65 Q80 48 74 30 Q68 14 55 12 Q44 10 35 15Z" fill="#558b2f"/>
+  <path d="M37 17 Q28 32 27 52 Q26 70 37 83 Q46 89 55 86 Q66 80 72 64 Q77 48 72 31 Q66 16 55 14 Q45 12 37 17Z" fill="#7cb342"/>
+  <!-- さやの縫い目 -->
+  <path d="M55 14 Q50 52 55 86" stroke="#33691e" stroke-width="1.5" fill="none"/>
+  <!-- 豆の膨らみ -->
+  <ellipse cx="51" cy="32" rx="12" ry="10" fill="#8bc34a" opacity="0.7"/>
+  <ellipse cx="51" cy="54" rx="12" ry="10" fill="#8bc34a" opacity="0.7"/>
+  <ellipse cx="51" cy="74" rx="10" ry="9" fill="#8bc34a" opacity="0.7"/>
+</svg>

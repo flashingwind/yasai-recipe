@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- ミニトマト: 房付きの小さな赤い実 -->
+  <!-- 茎（枝分かれ） -->
+  <line x1="50" y1="10" x2="50" y2="30" stroke="#558b2f" stroke-width="2"/>
+  <line x1="50" y1="22" x2="30" y2="36" stroke="#558b2f" stroke-width="2"/>
+  <line x1="50" y1="22" x2="70" y2="36" stroke="#558b2f" stroke-width="2"/>
+  <line x1="50" y1="28" x2="50" y2="42" stroke="#558b2f" stroke-width="2"/>
+  <!-- 実（5個） -->
+  <circle cx="24" cy="48" r="14" fill="#c62828"/>
+  <circle cx="23" cy="46" r="13" fill="#e53935"/>
+  <ellipse cx="19" cy="42" rx="5" ry="4" fill="#ef5350" opacity="0.5"/>
+  <circle cx="50" cy="54" r="14" fill="#c62828"/>
+  <circle cx="49" cy="52" r="13" fill="#e53935"/>
+  <ellipse cx="45" cy="48" rx="5" ry="4" fill="#ef5350" opacity="0.5"/>
+  <circle cx="76" cy="48" r="14" fill="#c62828"/>
+  <circle cx="75" cy="46" r="13" fill="#e53935"/>
+  <ellipse cx="71" cy="42" rx="5" ry="4" fill="#ef5350" opacity="0.5"/>
+  <!-- ガク -->
+  <path d="M24 36 L22 42 L24 40 L26 42Z" fill="#2e7d32"/>
+  <path d="M50 41 L48 47 L50 45 L52 47Z" fill="#2e7d32"/>
+  <path d="M76 36 L74 42 L76 40 L78 42Z" fill="#2e7d32"/>
+</svg>

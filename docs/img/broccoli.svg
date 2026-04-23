@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- ブロッコリー: 濃緑の花蕾と茎 -->
+  <!-- 茎 -->
+  <rect x="43" y="60" width="14" height="30" rx="5" fill="#558b2f"/>
+  <rect x="45" y="61" width="10" height="28" rx="4" fill="#7cb342"/>
+  <!-- 花蕾（複数の小房） -->
+  <!-- 中央 -->
+  <circle cx="50" cy="44" r="18" fill="#2e7d32"/>
+  <circle cx="50" cy="42" r="16" fill="#388e3c"/>
+  <!-- 小房の凹凸 -->
+  <circle cx="40" cy="36" r="10" fill="#2e7d32"/>
+  <circle cx="60" cy="36" r="10" fill="#2e7d32"/>
+  <circle cx="34" cy="48" r="9" fill="#33691e"/>
+  <circle cx="66" cy="48" r="9" fill="#33691e"/>
+  <circle cx="50" cy="30" r="10" fill="#2e7d32"/>
+  <!-- 表面のつぼみ感 -->
+  <circle cx="40" cy="34" r="4" fill="#1b5e20"/>
+  <circle cx="50" cy="28" r="4" fill="#1b5e20"/>
+  <circle cx="60" cy="34" r="4" fill="#1b5e20"/>
+  <circle cx="34" cy="46" r="3.5" fill="#1b5e20"/>
+  <circle cx="66" cy="46" r="3.5" fill="#1b5e20"/>
+  <circle cx="50" cy="44" r="4" fill="#1b5e20"/>
+</svg>

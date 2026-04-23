@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- さつまいも: 紫皮の細長い楕円 -->
+  <ellipse cx="50" cy="55" rx="36" ry="22" fill="#7b1fa2"/>
+  <ellipse cx="50" cy="53" rx="34" ry="20" fill="#9c27b0"/>
+  <!-- 表面のハイライト -->
+  <ellipse cx="38" cy="46" rx="10" ry="6" fill="#ab47bc" opacity="0.5"/>
+  <!-- へた（蔓の跡） -->
+  <path d="M20 46 Q14 38 16 30" stroke="#4a148c" stroke-width="2" fill="none"/>
+  <path d="M16 30 Q12 24 18 20" stroke="#4a148c" stroke-width="2" fill="none"/>
+  <!-- 根の先端 -->
+  <ellipse cx="84" cy="58" rx="5" ry="4" fill="#6a1b9a"/>
+  <line x1="84" y1="62" x2="86" y2="70" stroke="#6a1b9a" stroke-width="1.5"/>
+</svg>
