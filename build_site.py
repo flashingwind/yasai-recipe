@@ -14,24 +14,41 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(BASE, "docs")
 os.makedirs(DOCS, exist_ok=True)
 
-# 野菜名 → Unsplash 検索キーワード
+# 野菜名 → Wikimedia Commons の安定した画像URL
 VEGGIE_PHOTOS = {
-    "キャベツ": "cabbage", "だいこん": "daikon radish", "はくさい": "napa cabbage",
-    "レタス": "lettuce", "きゅうり": "cucumber", "トマト": "tomato",
-    "ほうれんそう": "spinach", "ねぎ": "green onion", "たまねぎ": "onion",
-    "にんじん": "carrot", "じゃがいも": "potato", "さつまいも": "sweet potato",
-    "なす": "eggplant", "ピーマン": "bell pepper", "ブロッコリー": "broccoli",
-    "カリフラワー": "cauliflower", "ごぼう": "burdock root", "れんこん": "lotus root",
-    "かぼちゃ": "pumpkin", "アスパラガス": "asparagus", "さやえんどう": "pea",
-    "そらまめ": "broad bean", "えだまめ": "edamame", "しょうが": "ginger",
-    "にんにく": "garlic", "セロリ": "celery", "パセリ": "parsley",
-    "みつば": "mitsuba", "しそ": "shiso", "チンゲンサイ": "bok choy",
-    "もやし": "bean sprouts", "こまつな": "komatsuna", "みずな": "mizuna",
+    "キャベツ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cabbage_and_cross_section_on_white.jpg/400px-Cabbage_and_cross_section_on_white.jpg",
+    "だいこん":     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Daikon_Radish.jpg/400px-Daikon_Radish.jpg",
+    "はくさい":     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/fifty/Brassica_rapa_subsp_pekinensis.jpg/400px-Brassica_rapa_subsp_pekinensis.jpg",
+    "レタス":       "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Salad_garden.jpg/400px-Salad_garden.jpg",
+    "きゅうり":     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cucumbers_-_whole_and_slice.jpg/400px-Cucumbers_-_whole_and_slice.jpg",
+    "トマト":       "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/400px-Tomato_je.jpg",
+    "ほうれんそう": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Spinach_leaves.jpg/400px-Spinach_leaves.jpg",
+    "ねぎ":         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Allium_fistulosum_4.jpg/400px-Allium_fistulosum_4.jpg",
+    "たまねぎ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Onions.jpg/400px-Onions.jpg",
+    "にんじん":     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Vegetable-Carrot-Bundle-wStalks.jpg/400px-Vegetable-Carrot-Bundle-wStalks.jpg",
+    "じゃがいも":   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Potato_and_cross_section.jpg/400px-Potato_and_cross_section.jpg",
+    "さつまいも":   "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ipomoea_batatas_006.jpg/400px-Ipomoea_batatas_006.jpg",
+    "なす":         "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Eggplant_je.jpg/400px-Eggplant_je.jpg",
+    "ピーマン":     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Capsicum_annuum_-_Bell_peppers.jpg/400px-Capsicum_annuum_-_Bell_peppers.jpg",
+    "ブロッコリー": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Fresh_broccoli_DSC00862.jpg/400px-Fresh_broccoli_DSC00862.jpg",
+    "カリフラワー": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cauliflower_DSC03991_white_background.JPG/400px-Cauliflower_DSC03991_white_background.JPG",
+    "ごぼう":       "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Arctium_lappa_roots.jpg/400px-Arctium_lappa_roots.jpg",
+    "れんこん":     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Renkon.jpg/400px-Renkon.jpg",
+    "かぼちゃ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Cucurbita_pepo_Potimarron_p1040998.jpg/400px-Cucurbita_pepo_Potimarron_p1040998.jpg",
+    "アスパラガス": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/White-and-green-asparagus.jpg/400px-White-and-green-asparagus.jpg",
+    "えだまめ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Edamame.jpg/400px-Edamame.jpg",
+    "かぶ":         "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Turnip_2622027.jpg/400px-Turnip_2622027.jpg",
+    "こまつな":     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Komatsuna.jpg/400px-Komatsuna.jpg",
+    "しょうが":     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Zingiber_officinale.jpg/400px-Zingiber_officinale.jpg",
+    "にんにく":     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Garlic_3.jpg/400px-Garlic_3.jpg",
+    "セロリ":       "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Celery_cross_section.jpg/400px-Celery_cross_section.jpg",
+    "チンゲンサイ": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Bok_choy_by_ayustety_in_Tokyo.jpg/400px-Bok_choy_by_ayustety_in_Tokyo.jpg",
+    "みずな":       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Mizuna.jpg/400px-Mizuna.jpg",
 }
+FALLBACK_IMG = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg"
 
 def veggie_img(name):
-    kw = VEGGIE_PHOTOS.get(name, name)
-    return f"https://source.unsplash.com/400x400/?{kw},vegetable,food"
+    return VEGGIE_PHOTOS.get(name, FALLBACK_IMG)
 
 
 # ── データ読込 ────────────────────────────────────────────────────────────────
@@ -121,7 +138,7 @@ def render_ranking(recipe_data, items):
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap">
-        <img class="rank-img" src="{img}" alt="{name}" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <img class="rank-img" src="{img}" alt="{name}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
         <span class="rank-medal">{m}</span>
         {wow}
       </div>
@@ -147,7 +164,7 @@ def render_recipes(recipe_data):
         cards += f"""
     <div class="recipe-card">
       <div class="recipe-img-wrap">
-        <img class="recipe-img" src="{img}" alt="{recipe['title']}" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
+        <img class="recipe-img" src="{img}" alt="{recipe['title']}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
         <div class="recipe-time-badge">🕐 {recipe['time_min']}分</div>
       </div>
       <div class="recipe-body">
@@ -182,7 +199,7 @@ def render_market_grid(items, recipe_data):
         img = veggie_img(r["品目"])
         cards += f"""
     <div class="market-card">
-      <img class="market-img" src="{img}" alt="{r['品目']}" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+      <img class="market-img" src="{img}" alt="{r['品目']}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
       <div class="market-body">
         <div class="market-name">{r['品目']}{badge}</div>
         <div class="market-stats">
