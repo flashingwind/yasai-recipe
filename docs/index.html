@@ -3,302 +3,278 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>野菜市況・レシピ提案</title>
+  <title>🥬 やさいのき — 今週のおすすめ野菜</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;
-          background:#f5f5f0;color:#333}
-    header{background:#2d6a4f;color:#fff;padding:16px 24px;
-            display:flex;align-items:center;justify-content:space-between}
-    header h1{font-size:1.3rem}
-    header .week{font-size:.9rem;opacity:.8}
-    .container{max-width:960px;margin:24px auto;padding:0 16px}
-    .section{background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;
-              box-shadow:0 1px 4px rgba(0,0,0,.08)}
-    h2{font-size:1.1rem;color:#2d6a4f;margin-bottom:14px;border-left:4px solid #2d6a4f;padding-left:10px}
-    .ranking-list{list-style:none}
-    .ranking-list li{display:flex;align-items:center;padding:10px 0;
-                      border-bottom:1px solid #eee;gap:12px}
-    .ranking-list li:last-child{border-bottom:none}
-    .rank-num{font-size:1.5rem;font-weight:bold;color:#2d6a4f;width:36px;text-align:center}
-    .rank-num.gold{color:#d4a017}.rank-num.silver{color:#888}.rank-num.bronze{color:#a0522d}
-    .rank-info{flex:1}
-    .rank-item{font-weight:bold;font-size:1rem}
-    .rank-reason{font-size:.85rem;color:#666;margin-top:2px}
-    .stars{color:#f4a261}
-    table{width:100%;border-collapse:collapse;font-size:.88rem}
-    th{background:#2d6a4f;color:#fff;padding:8px 10px;text-align:left}
-    td{padding:7px 10px;border-bottom:1px solid #eee}
-    tr:hover td{background:#f0f7f4}
-    .up{color:#e63946}.down{color:#457b9d}
-    .recipes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-    .recipe-card{border:1px solid #e0e0e0;border-radius:8px;padding:16px}
-    .recipe-card h3{font-size:1rem;color:#2d6a4f;margin-bottom:6px}
-    .recipe-meta{font-size:.8rem;color:#888;margin-bottom:10px}
-    .recipe-ingredients span{display:inline-block;background:#e9f5ee;border-radius:4px;
-                              padding:2px 7px;margin:2px;font-size:.85rem}
-    .recipe-steps{font-size:.85rem;padding-left:16px;color:#444;margin-top:8px}
+    body{font-family:'Noto Sans JP',sans-serif;background:#fafaf7;color:#222}
+
+    /* ヘッダー */
+    header{background:linear-gradient(135deg,#2d6a4f,#52b788);color:#fff;
+            padding:20px 24px;text-align:center}
+    .header-logo{font-size:2rem;font-weight:900;letter-spacing:-.5px}
+    .header-sub{font-size:.85rem;opacity:.85;margin-top:4px}
+    .week-pill{display:inline-block;background:rgba(255,255,255,.2);
+                border-radius:20px;padding:4px 14px;font-size:.8rem;margin-top:8px}
+
+    /* コンテナ */
+    .container{max-width:1000px;margin:0 auto;padding:20px 16px}
+
+    /* セクション */
+    .section{margin-bottom:36px}
+    .section-title{font-size:1.2rem;font-weight:900;color:#2d6a4f;
+                    margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to right,#52b788,transparent)}
+
+    /* 市況コメント */
+    .comment-box{background:linear-gradient(135deg,#e9f5ee,#f0faf4);
+                  border-left:4px solid #52b788;border-radius:0 12px 12px 0;
+                  padding:14px 18px;font-size:.9rem;color:#444;margin-bottom:20px;line-height:1.7}
+
+    /* ランキング */
+    .rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
+    .rank-card{background:#fff;border-radius:16px;overflow:hidden;
+                box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .2s}
+    .rank-card:hover{transform:translateY(-4px)}
+    .rank-img-wrap{position:relative}
+    .rank-img{width:100%;aspect-ratio:1;object-fit:cover}
+    .rank-medal{position:absolute;top:8px;left:8px;font-size:1.6rem;
+                 filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+    .rank-body{padding:12px}
+    .rank-name{font-weight:700;font-size:1rem;margin-bottom:4px}
+    .rank-reason{font-size:.75rem;color:#888;margin-bottom:8px;line-height:1.5}
+    .score-bar{background:#eee;border-radius:4px;height:6px;margin-bottom:4px}
+    .score-fill{height:6px;border-radius:4px;transition:width .6s ease}
+    .rank-score-label{font-size:.75rem;color:#aaa;text-align:right}
+
+    /* バッジ */
+    .badge{display:inline-block;border-radius:12px;padding:2px 8px;font-size:.72rem;
+            font-weight:700;position:absolute;top:8px;right:8px}
+    .badge-up{background:#ffebe9;color:#e63946}
+    .badge-down{background:#e9f0ff;color:#457b9d}
+    .badge-flat{background:#f0f0f0;color:#888}
+
+    /* レシピ */
+    .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+    .recipe-card{background:#fff;border-radius:16px;overflow:hidden;
+                  box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .2s}
+    .recipe-card:hover{transform:translateY(-4px)}
+    .recipe-img-wrap{position:relative}
+    .recipe-img{width:100%;height:180px;object-fit:cover}
+    .recipe-time-badge{position:absolute;bottom:10px;right:10px;
+                        background:rgba(0,0,0,.55);color:#fff;border-radius:12px;
+                        padding:4px 10px;font-size:.78rem;backdrop-filter:blur(4px)}
+    .recipe-body{padding:16px}
+    .recipe-tag{display:inline-block;background:#e9f5ee;color:#2d6a4f;
+                 border-radius:20px;padding:2px 10px;font-size:.75rem;font-weight:700;margin-bottom:8px}
+    .recipe-title{font-size:1rem;font-weight:700;margin-bottom:4px}
+    .recipe-serving{font-size:.78rem;color:#aaa;margin-bottom:10px}
+    .recipe-ings{margin-bottom:10px}
+    .ing{display:inline-block;background:#f5f5f0;border-radius:6px;
+          padding:2px 8px;margin:2px;font-size:.78rem;color:#555}
+    .recipe-steps{font-size:.82rem;padding-left:18px;color:#555;line-height:1.8}
     .recipe-steps li{margin-bottom:4px}
-    .no-data{color:#999;font-size:.9rem;padding:12px 0}
-    footer{text-align:center;padding:20px;font-size:.8rem;color:#aaa}
+
+    /* 市況グリッド */
+    .market-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+    .market-card{background:#fff;border-radius:14px;overflow:hidden;
+                  box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .2s}
+    .market-card:hover{transform:translateY(-3px)}
+    .market-img{width:100%;aspect-ratio:1;object-fit:cover}
+    .market-body{padding:10px}
+    .market-name{font-size:.85rem;font-weight:700;margin-bottom:6px;
+                  display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+    .market-stats{font-size:.75rem;color:#888;display:flex;flex-direction:column;gap:2px}
+
+    .no-data{color:#aaa;font-size:.9rem;padding:20px 0;text-align:center}
+    footer{text-align:center;padding:32px 16px;font-size:.78rem;color:#bbb}
+    footer a{color:#52b788;text-decoration:none}
   </style>
 </head>
 <body>
 <header>
-  <h1>🥬 野菜市況・レシピ提案</h1>
-  <span class="week">2026年4月第2週</span>
+  <div class="header-logo">🥬 やさいのき</div>
+  <div class="header-sub">東京中央卸売市場の市況から、今週買うべき野菜をお届け</div>
+  <div class="week-pill">2026年4月第2週</div>
 </header>
+
 <div class="container">
 
   <div class="section">
-    <h2>🏆 今週のおすすめランキング</h2>
-    
-    <p class="no-data">レシピ・ランキングデータがありません。GitHub Actionsを実行してください。</p>
+    <div class="section-title">🏆 今週のおすすめランキング</div>
+    <div class="comment-box">今週は全体の入荷量が前週比3%増と安定。キャベツ・だいこん・はくさいが食べごろでおすすめです。価格も落ち着いており、毎日の食卓に取り入れやすい週となっています。</div>
+    <div class="rank-grid">
+    <div class="rank-card">
+      <div class="rank-img-wrap">
+        <img class="rank-img" src="https://source.unsplash.com/400x400/?cabbage,vegetable,food" alt="キャベツ" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <span class="rank-medal">🥇</span>
+        <span class="badge badge-flat">→100%</span>
+      </div>
+      <div class="rank-body">
+        <div class="rank-name">キャベツ</div>
+        <div class="rank-reason">入荷量743t、中値1382円</div>
+        <div class="score-bar"><div class="score-fill" style="width:81%;background:#52b788"></div></div>
+        <div class="rank-score-label">81点</div>
+      </div>
+    </div>
+    <div class="rank-card">
+      <div class="rank-img-wrap">
+        <img class="rank-img" src="https://source.unsplash.com/400x400/?daikon radish,vegetable,food" alt="だいこん" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <span class="rank-medal">🥈</span>
+        <span class="badge badge-down">↓97%</span>
+      </div>
+      <div class="rank-body">
+        <div class="rank-name">だいこん</div>
+        <div class="rank-reason">入荷量357t、中値821円</div>
+        <div class="score-bar"><div class="score-fill" style="width:67%;background:#f4a261"></div></div>
+        <div class="rank-score-label">67点</div>
+      </div>
+    </div>
+    <div class="rank-card">
+      <div class="rank-img-wrap">
+        <img class="rank-img" src="https://source.unsplash.com/400x400/?napa cabbage,vegetable,food" alt="はくさい" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <span class="rank-medal">🥉</span>
+        <span class="badge badge-up">↑101%</span>
+      </div>
+      <div class="rank-body">
+        <div class="rank-name">はくさい</div>
+        <div class="rank-reason">入荷量271t、中値670円</div>
+        <div class="score-bar"><div class="score-fill" style="width:64%;background:#f4a261"></div></div>
+        <div class="rank-score-label">64点</div>
+      </div>
+    </div>
+    <div class="rank-card">
+      <div class="rank-img-wrap">
+        <img class="rank-img" src="https://source.unsplash.com/400x400/?lettuce,vegetable,food" alt="レタス" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <span class="rank-medal">#4</span>
+        <span class="badge badge-up">↑110%</span>
+      </div>
+      <div class="rank-body">
+        <div class="rank-name">レタス</div>
+        <div class="rank-reason">入荷量243t、中値1426円</div>
+        <div class="score-bar"><div class="score-fill" style="width:63%;background:#f4a261"></div></div>
+        <div class="rank-score-label">63点</div>
+      </div>
+    </div>
+    <div class="rank-card">
+      <div class="rank-img-wrap">
+        <img class="rank-img" src="https://source.unsplash.com/400x400/?cucumber,vegetable,food" alt="きゅうり" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <span class="rank-medal">#5</span>
+        <span class="badge badge-up">↑112%</span>
+      </div>
+      <div class="rank-body">
+        <div class="rank-name">きゅうり</div>
+        <div class="rank-reason">入荷量285t、中値1728円</div>
+        <div class="score-bar"><div class="score-fill" style="width:63%;background:#f4a261"></div></div>
+        <div class="rank-score-label">63点</div>
+      </div>
+    </div></div>
   </div>
 
   <div class="section">
-    <h2>🍽️ 簡単レシピ</h2>
-    
+    <div class="section-title">🍳 今週の簡単レシピ</div>
+    <div class="recipe-grid">
+    <div class="recipe-card">
+      <div class="recipe-img-wrap">
+        <img class="recipe-img" src="https://source.unsplash.com/400x400/?cabbage,vegetable,food" alt="無限キャベツの塩昆布和え" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
+        <div class="recipe-time-badge">🕐 10分</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-tag">キャベツ</div>
+        <h3 class="recipe-title">無限キャベツの塩昆布和え</h3>
+        <div class="recipe-serving">👥 2人分</div>
+        <div class="recipe-ings"><span class='ing'>キャベツ 1/4個</span><span class='ing'>塩昆布 大さじ2</span><span class='ing'>ごま油 大さじ1</span><span class='ing'>白ごま 適量</span></div>
+        <ol class="recipe-steps"><li>キャベツをひと口大にちぎる</li><li>耐熱ボウルに入れ電子レンジで2分加熱する</li><li>塩昆布・ごま油・白ごまを加えて和える</li></ol>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-img-wrap">
+        <img class="recipe-img" src="https://source.unsplash.com/400x400/?daikon radish,vegetable,food" alt="だいこんとツナのサラダ" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
+        <div class="recipe-time-badge">🕐 10分</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-tag">だいこん</div>
+        <h3 class="recipe-title">だいこんとツナのサラダ</h3>
+        <div class="recipe-serving">👥 2人分</div>
+        <div class="recipe-ings"><span class='ing'>だいこん 1/4本</span><span class='ing'>ツナ缶 1缶</span><span class='ing'>マヨネーズ 大さじ2</span><span class='ing'>しょうゆ 小さじ1</span><span class='ing'>塩 少々</span></div>
+        <ol class="recipe-steps"><li>だいこんを千切りにし、塩をふって5分置き水気を絞る</li><li>油を切ったツナ、マヨネーズ、しょうゆを加える</li><li>全体をよく混ぜ合わせて器に盛る</li></ol>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-img-wrap">
+        <img class="recipe-img" src="https://source.unsplash.com/400x400/?napa cabbage,vegetable,food" alt="はくさいと豚バラのミルフィーユ鍋" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
+        <div class="recipe-time-badge">🕐 25分</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-tag">はくさい</div>
+        <h3 class="recipe-title">はくさいと豚バラのミルフィーユ鍋</h3>
+        <div class="recipe-serving">👥 2人分</div>
+        <div class="recipe-ings"><span class='ing'>はくさい 1/4株</span><span class='ing'>豚バラ薄切り肉 200g</span><span class='ing'>だし汁 500ml</span><span class='ing'>しょうゆ 大さじ2</span><span class='ing'>みりん 大さじ2</span></div>
+        <ol class="recipe-steps"><li>はくさいと豚バラを交互に重ね、5cm幅に切る</li><li>鍋に切り口を上にして敷き詰める</li><li>だし汁と調味料を加え、蓋をして15分煮込む</li></ol>
+      </div>
+    </div></div>
   </div>
 
   <div class="section">
-    <h2>📊 市況データ（2026年4月第2週）</h2>
-    
-    <table>
-      <thead>
-        <tr><th>品目</th><th>入荷量(t)</th><th>前週比</th><th>前年比</th>
-            <th>高値(円)</th><th>中値(円)</th><th>安値(円)</th></tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>だいこん</td>
-        <td>357</td>
-        <td><span class="down">▼97%</span></td>
-        <td>89%</td>
-        <td>1404</td>
-        <td>821</td>
-        <td>216</td>
-      </tr>
-      <tr>
-        <td>かぶ</td>
-        <td>50</td>
-        <td><span class="down">▼86%</span></td>
-        <td>100%</td>
-        <td>184</td>
-        <td>119</td>
-        <td>43</td>
-      </tr>
-      <tr>
-        <td>にんじん</td>
-        <td>335</td>
-        <td><span class="up">▲133%</span></td>
-        <td>125%</td>
-        <td>2808</td>
-        <td>2138</td>
-        <td>540</td>
-      </tr>
-      <tr>
-        <td>ごぼう</td>
-        <td>15</td>
-        <td><span class="up">▲104%</span></td>
-        <td>76%</td>
-        <td>1404</td>
-        <td>1134</td>
-        <td>270</td>
-      </tr>
-      <tr>
-        <td>たけのこ</td>
-        <td>73</td>
-        <td><span class="up">▲153%</span></td>
-        <td>135%</td>
-        <td>4860</td>
-        <td>2268</td>
-        <td>1080</td>
-      </tr>
-      <tr>
-        <td>キャベツ</td>
-        <td>743</td>
-        <td>―100%</td>
-        <td>94%</td>
-        <td>2160</td>
-        <td>1382</td>
-        <td>324</td>
-      </tr>
-      <tr>
-        <td>レタス</td>
-        <td>243</td>
-        <td><span class="up">▲110%</span></td>
-        <td>99%</td>
-        <td>2376</td>
-        <td>1426</td>
-        <td>324</td>
-      </tr>
-      <tr>
-        <td>はくさい</td>
-        <td>271</td>
-        <td><span class="up">▲101%</span></td>
-        <td>114%</td>
-        <td>1404</td>
-        <td>670</td>
-        <td>324</td>
-      </tr>
-      <tr>
-        <td>こまつな</td>
-        <td>57</td>
-        <td><span class="down">▼95%</span></td>
-        <td>87%</td>
-        <td>86</td>
-        <td>56</td>
-        <td>22</td>
-      </tr>
-      <tr>
-        <td>ほうれんそう</td>
-        <td>63</td>
-        <td><span class="down">▼92%</span></td>
-        <td>103%</td>
-        <td>162</td>
-        <td>90</td>
-        <td>22</td>
-      </tr>
-      <tr>
-        <td>ねぎ</td>
-        <td>169</td>
-        <td><span class="down">▼96%</span></td>
-        <td>108%</td>
-        <td>2592</td>
-        <td>1102</td>
-        <td>324</td>
-      </tr>
-      <tr>
-        <td>ふき</td>
-        <td>8</td>
-        <td><span class="up">▲144%</span></td>
-        <td>118%</td>
-        <td>2160</td>
-        <td>1490</td>
-        <td>864</td>
-      </tr>
-      <tr>
-        <td>セルリー</td>
-        <td>29</td>
-        <td><span class="up">▲105%</span></td>
-        <td>106%</td>
-        <td>4104</td>
-        <td>2592</td>
-        <td>1944</td>
-      </tr>
-      <tr>
-        <td>ブロッコリー</td>
-        <td>128</td>
-        <td><span class="down">▼92%</span></td>
-        <td>85%</td>
-        <td>4968</td>
-        <td>3910</td>
-        <td>2592</td>
-      </tr>
-      <tr>
-        <td>きゅうり</td>
-        <td>285</td>
-        <td><span class="up">▲112%</span></td>
-        <td>97%</td>
-        <td>2808</td>
-        <td>1728</td>
-        <td>864</td>
-      </tr>
-      <tr>
-        <td>かぼちゃ</td>
-        <td>89</td>
-        <td><span class="up">▲104%</span></td>
-        <td>94%</td>
-        <td>—</td>
-        <td>—</td>
-        <td>—</td>
-      </tr>
-      <tr>
-        <td>なす</td>
-        <td>149</td>
-        <td><span class="down">▼84%</span></td>
-        <td>83%</td>
-        <td>194</td>
-        <td>151</td>
-        <td>119</td>
-      </tr>
-      <tr>
-        <td>トマト</td>
-        <td>309</td>
-        <td><span class="up">▲107%</span></td>
-        <td>109%</td>
-        <td>1944</td>
-        <td>1534</td>
-        <td>1080</td>
-      </tr>
-      <tr>
-        <td>ミニトマト</td>
-        <td>124</td>
-        <td><span class="up">▲103%</span></td>
-        <td>124%</td>
-        <td>2160</td>
-        <td>1555</td>
-        <td>648</td>
-      </tr>
-      <tr>
-        <td>ピーマン</td>
-        <td>105</td>
-        <td><span class="down">▼93%</span></td>
-        <td>87%</td>
-        <td>140</td>
-        <td>97</td>
-        <td>86</td>
-      </tr>
-      <tr>
-        <td>そらまめ</td>
-        <td>16</td>
-        <td><span class="up">▲112%</span></td>
-        <td>67%</td>
-        <td>3780</td>
-        <td>2635</td>
-        <td>1080</td>
-      </tr>
-      <tr>
-        <td>じゃがいも</td>
-        <td>266</td>
-        <td><span class="up">▲115%</span></td>
-        <td>105%</td>
-        <td>4644</td>
-        <td>4450</td>
-        <td>3240</td>
-      </tr>
-      <tr>
-        <td>さつまいも</td>
-        <td>98</td>
-        <td><span class="down">▼94%</span></td>
-        <td>82%</td>
-        <td>2376</td>
-        <td>1469</td>
-        <td>432</td>
-      </tr>
-      <tr>
-        <td>たまねぎ</td>
-        <td>408</td>
-        <td><span class="up">▲101%</span></td>
-        <td>106%</td>
-        <td>6480</td>
-        <td>6048</td>
-        <td>2160</td>
-      </tr>
-      <tr>
-        <td>なましいたけ</td>
-        <td>24</td>
-        <td><span class="down">▼94%</span></td>
-        <td>96%</td>
-        <td>216</td>
-        <td>126</td>
-        <td>32</td>
-      </tr></tbody>
-    </table>
+    <div class="section-title">📦 今週の市況一覧</div>
+    <div class="market-grid">
+    <div class="market-card">
+      <img class="market-img" src="https://source.unsplash.com/400x400/?daikon radish,vegetable,food" alt="だいこん" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+      <div class="market-body">
+        <div class="market-name">だいこん<span class="badge badge-down">↓97%</span></div>
+        <div class="market-stats">
+          <span>📦 357t</span>
+          <span>💴 821円</span>
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <img class="market-img" src="https://source.unsplash.com/400x400/?cabbage,vegetable,food" alt="キャベツ" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+      <div class="market-body">
+        <div class="market-name">キャベツ<span class="badge badge-flat">→100%</span></div>
+        <div class="market-stats">
+          <span>📦 743t</span>
+          <span>💴 1382円</span>
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <img class="market-img" src="https://source.unsplash.com/400x400/?lettuce,vegetable,food" alt="レタス" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+      <div class="market-body">
+        <div class="market-name">レタス<span class="badge badge-up">↑110%</span></div>
+        <div class="market-stats">
+          <span>📦 243t</span>
+          <span>💴 1426円</span>
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <img class="market-img" src="https://source.unsplash.com/400x400/?napa cabbage,vegetable,food" alt="はくさい" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+      <div class="market-body">
+        <div class="market-name">はくさい<span class="badge badge-up">↑101%</span></div>
+        <div class="market-stats">
+          <span>📦 271t</span>
+          <span>💴 670円</span>
+        </div>
+      </div>
+    </div>
+    <div class="market-card">
+      <img class="market-img" src="https://source.unsplash.com/400x400/?cucumber,vegetable,food" alt="きゅうり" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+      <div class="market-body">
+        <div class="market-name">きゅうり<span class="badge badge-up">↑112%</span></div>
+        <div class="market-stats">
+          <span>📦 285t</span>
+          <span>💴 1728円</span>
+        </div>
+      </div>
+    </div></div>
   </div>
 
 </div>
-<footer>更新: 2026-04-24 01:59 JST | データ: 東京都中央卸売市場</footer>
+<footer>
+  更新: 2026-04-24 02:17 JST &nbsp;|&nbsp;
+  データ: <a href="https://www.shijou.metro.tokyo.lg.jp/" target="_blank">東京都中央卸売市場</a>
+</footer>
 </body>
 </html>
