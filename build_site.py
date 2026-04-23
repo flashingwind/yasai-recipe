@@ -14,28 +14,48 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(BASE, "docs")
 os.makedirs(DOCS, exist_ok=True)
 
-# 野菜名 → 絵文字＋背景色（外部画像依存なし）
+# 野菜名 → (絵文字, 背景色)
+# Twemojiで統一表示するため絵文字コードポイントからSVG URLを生成
 VEGGIE_EMOJI = {
-    "キャベツ": ("🥬", "#d4edda"), "だいこん": ("🫚", "#f0f0f0"),
-    "はくさい": ("🥬", "#e8f5e9"), "レタス": ("🥗", "#c8e6c9"),
-    "きゅうり": ("🥒", "#a5d6a7"), "トマト": ("🍅", "#ffcdd2"),
-    "ほうれんそう": ("🌿", "#b2dfdb"), "ねぎ": ("🧅", "#fff9c4"),
-    "たまねぎ": ("🧅", "#ffe0b2"), "にんじん": ("🥕", "#ffe0b2"),
-    "じゃがいも": ("🥔", "#f5f5dc"), "さつまいも": ("🍠", "#f8bbd0"),
-    "なす": ("🍆", "#e1bee7"), "ピーマン": ("🫑", "#c5e1a5"),
-    "ブロッコリー": ("🥦", "#aed581"), "カリフラワー": ("🥦", "#f5f5f5"),
-    "ごぼう": ("🌾", "#efebe9"), "れんこん": ("🪷", "#fce4ec"),
-    "かぼちゃ": ("🎃", "#ffe0b2"), "アスパラガス": ("🌱", "#dcedc8"),
-    "えだまめ": ("🫘", "#c8e6c9"), "かぶ": ("🫛", "#fce4ec"),
-    "こまつな": ("🌿", "#b2dfdb"), "しょうが": ("🫚", "#fff9c4"),
-    "にんにく": ("🧄", "#fffde7"), "セロリ": ("🌿", "#ccff90"),
-    "チンゲンサイ": ("🥬", "#e0f2f1"), "みずな": ("🌿", "#e8f5e9"),
+    "キャベツ":     ("🥬", "#d4edda"),
+    "だいこん":     ("🥕", "#fff3e0"),  # 大根専用絵文字なし→にんじんで代用しない、白背景
+    "はくさい":     ("🥬", "#e8f5e9"),
+    "レタス":       ("🥗", "#c8e6c9"),
+    "きゅうり":     ("🥒", "#a5d6a7"),
+    "トマト":       ("🍅", "#ffcdd2"),
+    "ほうれんそう": ("🌿", "#b2dfdb"),
+    "ねぎ":         ("🌱", "#f9fbe7"),
+    "たまねぎ":     ("🧅", "#ffe0b2"),
+    "にんじん":     ("🥕", "#ffe0b2"),
+    "じゃがいも":   ("🥔", "#f5f5dc"),
+    "さつまいも":   ("🍠", "#f8bbd0"),
+    "なす":         ("🍆", "#e1bee7"),
+    "ピーマン":     ("🫑", "#c5e1a5"),
+    "ブロッコリー": ("🥦", "#aed581"),
+    "カリフラワー": ("🥦", "#f5f5f5"),
+    "ごぼう":       ("🌾", "#efebe9"),
+    "れんこん":     ("🪷", "#fce4ec"),
+    "かぼちゃ":     ("🎃", "#fff3e0"),
+    "アスパラガス": ("🌱", "#dcedc8"),
+    "えだまめ":     ("🫘", "#c8e6c9"),
+    "かぶ":         ("🌸", "#fce4ec"),
+    "こまつな":     ("🌿", "#b2dfdb"),
+    "しょうが":     ("🌶", "#fff9c4"),
+    "にんにく":     ("🧄", "#fffde7"),
+    "セロリ":       ("🌿", "#ccff90"),
+    "チンゲンサイ": ("🥬", "#e0f2f1"),
+    "みずな":       ("🌿", "#e8f5e9"),
 }
 FALLBACK_EMOJI = ("🥬", "#e8f5e9")
 
+def _twemoji_url(emoji):
+    """絵文字 → Twemoji CDN の SVG URL"""
+    codepoints = "-".join(f"{ord(c):x}" for c in emoji if ord(c) != 0xfe0f)
+    return f"https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/{codepoints}.svg"
+
 def veggie_visual(name):
     emoji, bg = VEGGIE_EMOJI.get(name, FALLBACK_EMOJI)
-    return emoji, bg
+    return _twemoji_url(emoji), bg
 
 
 # ── データ読込 ────────────────────────────────────────────────────────────────
@@ -133,7 +153,7 @@ def render_ranking(recipe_data, items):
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:{bg}">
-        <span class="veggie-emoji">{emoji}</span>
+        <img class="veggie-emoji" src="{emoji}" alt="{name}">
         <span class="rank-medal">{m}</span>
         {wow}
       </div>
@@ -155,11 +175,12 @@ def render_recipes(recipe_data):
     for recipe in recipe_data.get("recipes", []):
         ings = "".join(f"<span class='ing'>{i}</span>" for i in recipe.get("ingredients", []))
         steps = "".join(f"<li>{s}</li>" for s in recipe.get("steps", []))
-        emoji, bg = veggie_visual(recipe.get("item", ""))
+        item_name = recipe.get("item", "")
+        emoji, bg = veggie_visual(item_name)
         cards += f"""
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:{bg}">
-        <span class="veggie-emoji">{emoji}</span>
+        <img class="veggie-emoji" src="{emoji}" alt="{item_name}">
         <div class="recipe-time-badge">🕐 {recipe['time_min']}分</div>
       </div>
       <div class="recipe-body">
@@ -193,7 +214,7 @@ def render_market_grid(items, recipe_data):
         cards += f"""
     <div class="market-card">
       <div class="market-img-wrap" style="background:{bg}">
-        <span class="veggie-emoji-sm">{emoji}</span>
+        <img class="veggie-emoji-sm" src="{emoji}" alt="{name}">
       </div>
       <div class="market-body">
         <div class="market-name">{r['品目']}{badge}</div>
@@ -248,8 +269,8 @@ HTML_TEMPLATE = """\
     .rank-card:hover{{transform:translateY(-4px)}}
     .rank-img-wrap{{position:relative;width:100%;aspect-ratio:1;
                     display:flex;align-items:center;justify-content:center}}
-    .veggie-emoji{{font-size:4rem;line-height:1;user-select:none}}
-    .veggie-emoji-sm{{font-size:2.5rem;line-height:1;user-select:none}}
+    .veggie-emoji{{width:72px;height:72px;object-fit:contain;user-select:none}}
+    .veggie-emoji-sm{{width:48px;height:48px;object-fit:contain;user-select:none}}
     .rank-medal{{position:absolute;top:8px;left:8px;font-size:1.6rem;
                  filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}}
     .rank-body{{padding:12px}}

@@ -39,8 +39,8 @@
     .rank-card:hover{transform:translateY(-4px)}
     .rank-img-wrap{position:relative;width:100%;aspect-ratio:1;
                     display:flex;align-items:center;justify-content:center}
-    .veggie-emoji{font-size:4rem;line-height:1;user-select:none}
-    .veggie-emoji-sm{font-size:2.5rem;line-height:1;user-select:none}
+    .veggie-emoji{width:72px;height:72px;object-fit:contain;user-select:none}
+    .veggie-emoji-sm{width:48px;height:48px;object-fit:contain;user-select:none}
     .rank-medal{position:absolute;top:8px;left:8px;font-size:1.6rem;
                  filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
     .rank-body{padding:12px}
@@ -113,7 +113,7 @@
     <div class="rank-grid">
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:#d4edda">
-        <span class="veggie-emoji">🥬</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f96c.svg" alt="キャベツ">
         <span class="rank-medal">🥇</span>
         <span class="badge badge-flat">→100%</span>
       </div>
@@ -127,7 +127,7 @@
     </div>
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:#b2dfdb">
-        <span class="veggie-emoji">🌿</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f33f.svg" alt="ほうれんそう">
         <span class="rank-medal">🥈</span>
         <span class="badge badge-down">↓92%</span>
       </div>
@@ -141,7 +141,7 @@
     </div>
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:#fce4ec">
-        <span class="veggie-emoji">🫛</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f338.svg" alt="かぶ">
         <span class="rank-medal">🥉</span>
         <span class="badge badge-down">↓86%</span>
       </div>
@@ -154,8 +154,8 @@
       </div>
     </div>
     <div class="rank-card">
-      <div class="rank-img-wrap" style="background:#f0f0f0">
-        <span class="veggie-emoji">🫚</span>
+      <div class="rank-img-wrap" style="background:#fff3e0">
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f955.svg" alt="だいこん">
         <span class="rank-medal">#4</span>
         <span class="badge badge-down">↓97%</span>
       </div>
@@ -169,7 +169,7 @@
     </div>
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:#b2dfdb">
-        <span class="veggie-emoji">🌿</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f33f.svg" alt="こまつな">
         <span class="rank-medal">#5</span>
         <span class="badge badge-down">↓95%</span>
       </div>
@@ -188,7 +188,7 @@
     <div class="recipe-grid">
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:#d4edda">
-        <span class="veggie-emoji">🥬</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f96c.svg" alt="キャベツ">
         <div class="recipe-time-badge">🕐 10分</div>
       </div>
       <div class="recipe-body">
@@ -201,7 +201,7 @@
     </div>
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:#b2dfdb">
-        <span class="veggie-emoji">🌿</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f33f.svg" alt="ほうれんそう">
         <div class="recipe-time-badge">🕐 8分</div>
       </div>
       <div class="recipe-body">
@@ -214,7 +214,7 @@
     </div>
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:#fce4ec">
-        <span class="veggie-emoji">🫛</span>
+        <img class="veggie-emoji" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f338.svg" alt="かぶ">
         <div class="recipe-time-badge">🕐 10分</div>
       </div>
       <div class="recipe-body">
@@ -230,7 +230,7 @@
 
 </div>
 <footer>
-  更新: 2026-04-24 02:50 JST &nbsp;|&nbsp;
+  更新: 2026-04-24 02:54 JST &nbsp;|&nbsp;
   データ: <a href="https://www.shijou.metro.tokyo.lg.jp/" target="_blank">東京都中央卸売市場</a>
 </footer>
 </body>
