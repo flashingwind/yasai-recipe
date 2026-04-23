@@ -76,6 +76,20 @@ def get_latest_csv():
     return sorted(files, reverse=True)[0]
 
 
+def load_all_weeks(csvfile):
+    """全週データを {週: {品目: row}} で返す"""
+    with open(csvfile, encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    valid = [r for r in rows if re.match(r"\d{4}年", r["週"])]
+    weeks = {}
+    for r in valid:
+        w = r["週"]
+        name = r["品目"].strip()
+        if name and name != "総入荷量":
+            weeks.setdefault(w, {})[name] = r
+    return weeks
+
+
 def load_latest_week(csvfile):
     with open(csvfile, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
@@ -91,6 +105,69 @@ def load_latest_week(csvfile):
             seen.add(name)
             unique.append(r)
     return unique, latest_week
+
+
+# 品目ごとの小売乗率（葉物・根菜・果菜で異なる）
+RETAIL_MULTIPLIER = {
+    "default": 2.5,
+    "キャベツ": 2.0, "だいこん": 2.0, "はくさい": 2.0, "ごぼう": 2.2,
+    "ほうれんそう": 2.8, "こまつな": 2.8, "みずな": 2.8, "しそ": 3.0,
+    "トマト": 2.5, "きゅうり": 2.5, "なす": 2.5, "ピーマン": 2.8,
+    "レタス": 2.5, "ブロッコリー": 2.5, "カリフラワー": 2.5,
+    "たまねぎ": 2.0, "じゃがいも": 2.0, "さつまいも": 2.2, "にんじん": 2.0,
+}
+
+def estimate_retail_price(name, prev_week_data):
+    """1週間前の卸値から今週のスーパー推定価格を計算（100g単位）"""
+    row = prev_week_data.get(name)
+    if not row:
+        return None
+    try:
+        mid = float(row["中値円"] or 0)
+        if mid <= 0:
+            return None
+    except (ValueError, TypeError):
+        return None
+    multiplier = RETAIL_MULTIPLIER.get(name, RETAIL_MULTIPLIER["default"])
+    # 卸値は1kg単位 → 100g単価に変換
+    per_100g = (mid * multiplier) / 10
+    # 10円単位に丸める
+    return round(per_100g / 10) * 10
+
+
+def calculate_score_with_retail(item, rules, max_values):
+    """推定小売価格があればそれを優先してスコア計算"""
+    try:
+        vol = float(item["入荷量t"] or 0)
+        wow = float(item["前週比%"] or 100)
+        yoy = float(item["前年比%"] or 100)
+        retail = item.get("推定小売円_100g")
+    except (ValueError, KeyError):
+        return 0
+
+    # 豊富さ
+    richness = (vol / max_values["vol"]) * 100 if max_values["vol"] > 0 else 0
+
+    # トレンド
+    trend = max(min((wow - 50) / 150 * 100, 100), 0)
+
+    # 旬度
+    seasonality = 100 - min(abs(yoy - 100) * 0.8, 100)
+
+    # 手頃さ：推定小売価格があれば優先
+    if retail and max_values.get("retail_price", 0) > 0:
+        affordability = (1 - retail / max_values["retail_price"]) * 100
+    else:
+        price = float(item["中値円"] or max_values["price"])
+        affordability = (1 - price / max_values["price"]) * 100 if max_values["price"] > 0 else 0
+
+    score = (
+        0.50 * affordability +
+        0.30 * seasonality +
+        0.15 * richness +
+        0.05 * trend
+    )
+    return int(max(0, min(100, score)))
 
 
 def calc_max_values(items):
@@ -159,9 +236,9 @@ def generate_recipe_and_comment(market_summary, top_items, market_comment):
     system_prompt = """あなたは野菜料理のプロです。
 野菜の市況データをもとに、消費者向けのコメントと簡単レシピを生成します。"""
 
-    items_str = "\n".join(f"- {item}: {score}点" for item, score in top_items)
+    items_str = "\n".join(f"- {name}: {score}点（{price}）" for name, score, price in top_items)
 
-    user_message = f"""以下は今週のおすすめ果実トップ5です：
+    user_message = f"""以下は今週のおすすめ野菜トップ5です（スーパー推定価格付き）：
 
 {items_str}
 
@@ -170,11 +247,11 @@ def generate_recipe_and_comment(market_summary, top_items, market_comment):
 
 この情報をもとに、以下の JSON を生成してください：
 {{
-  "market_comment": "消費者向けの簡潔な市況説明（1～2文）",
+  "market_comment": "消費者向けの簡潔な市況説明（1～2文、価格と旬に言及）",
   "recipes": [
     {{
       "title": "レシピ名",
-      "item": "対象果実",
+      "item": "対象野菜",
       "time_min": 調理時間分,
       "servings": "○人分",
       "ingredients": ["材料1", "材料2"],
@@ -217,6 +294,11 @@ def main():
     print(f"CSVファイル: {csvfile}")
     print(f"週: {week}  品目数: {len(items)}")
 
+    # 前週データを取得（1週間ディレイで小売価格推定に使用）
+    all_weeks = load_all_weeks(csvfile)
+    sorted_weeks = sorted(all_weeks.keys(), reverse=True)
+    prev_week_data = all_weeks[sorted_weeks[1]] if len(sorted_weeks) >= 2 else {}
+
     # キャッシュを確認
     cached = load_cache(week)
     if cached:
@@ -228,28 +310,47 @@ def main():
             "recipes": cached.get("recipes", [])
         }
     else:
-        # ランキングを計算（API不要）
-        print("計算中...")
+        # 各品目に推定小売価格を付与
+        for item in items:
+            name = item["品目"].strip()
+            retail = estimate_retail_price(name, prev_week_data)
+            item["推定小売円_100g"] = retail
+
+        # 推定価格ベースで max_price を再計算
         max_values = calc_max_values(items)
+        # 推定価格がある品目はそれを価格スコアに使用
+        retail_prices = [i["推定小売円_100g"] for i in items if i.get("推定小売円_100g")]
+        if retail_prices:
+            max_values["retail_price"] = max(retail_prices)
+
+        print("計算中...")
         scores = []
         for item in items:
-            score = calculate_score(item, rules, max_values)
+            score = calculate_score_with_retail(item, rules, max_values)
             scores.append((item["品目"], score, item))
 
         scores.sort(key=lambda x: x[1], reverse=True)
-        ranking = [
-            {
+        ranking = []
+        for i, (name, score, r) in enumerate(scores[:5]):
+            retail = r.get("推定小売円_100g")
+            retail_str = f"約{retail}円/100g" if retail else "価格調査中"
+            ranking.append({
                 "rank": i + 1,
                 "item": name,
                 "score": score,
-                "reason": f"入荷量{r['入荷量t']}t、中値{r['中値円']}円"
-            }
-            for i, (name, score, r) in enumerate(scores[:5])
-        ]
+                "retail_price": retail,
+                "reason": f"スーパー目安 {retail_str}、入荷量{r['入荷量t']}t"
+            })
 
         # Claude API でレシピ・コメント生成
         print("レシピ・コメント生成中...")
-        top_items = [(name, score) for name, score, _ in scores[:3]]
+        top_items = [
+            (name, score, f"約{r.get('推定小売円_100g')}円/100g" if r.get('推定小売円_100g') else "")
+            for name, score, r in scores[:3]
+        ]
+        items_str_with_price = "\n".join(
+            f"- {name}: {score}点（{price}）" for name, score, price in top_items
+        )
         market_comment = build_comment(items)
         recipe_data = generate_recipe_and_comment("", top_items, market_comment)
 

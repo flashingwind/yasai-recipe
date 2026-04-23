@@ -47,6 +47,8 @@
     .score-bar{background:#eee;border-radius:4px;height:6px;margin-bottom:4px}
     .score-fill{height:6px;border-radius:4px;transition:width .6s ease}
     .rank-score-label{font-size:.75rem;color:#aaa;text-align:right}
+    .retail-price{font-size:1rem;font-weight:900;color:#e63946;margin-bottom:4px}
+    .per100g{font-size:.7rem;font-weight:400;color:#aaa;margin-left:2px}
 
     /* バッジ */
     .badge{display:inline-block;border-radius:12px;padding:2px 8px;font-size:.72rem;
@@ -103,7 +105,7 @@
 
   <div class="section">
     <div class="section-title">🏆 今週のおすすめランキング</div>
-    <div class="comment-box">今週はキャベツが高評価でおすすめ。神奈川県産の価格はやや強含みですが、春野菜らしい甘みが楽しめる時期です。かぶやほうれんそうは入荷量がやや減少していますが、旬の美味しさは健在です。</div>
+    <div class="comment-box">今週はキャベツがやや高値（約230円/100g）の強保合ですが、ほうれんそうとかぶはお手頃価格でおすすめ。葉物野菜が旬を迎え、甘みと栄養が豊富な時期です。</div>
     <div class="rank-grid">
     <div class="rank-card">
       <div class="rank-img-wrap">
@@ -113,35 +115,38 @@
       </div>
       <div class="rank-body">
         <div class="rank-name">キャベツ</div>
-        <div class="rank-reason">入荷量743t、中値1382円</div>
-        <div class="score-bar"><div class="score-fill" style="width:83%;background:#52b788"></div></div>
-        <div class="rank-score-label">83点</div>
-      </div>
-    </div>
-    <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="https://source.unsplash.com/400x400/?かぶ,vegetable,food" alt="かぶ" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
-        <span class="rank-medal">🥈</span>
-        <span class="badge badge-down">↓86%</span>
-      </div>
-      <div class="rank-body">
-        <div class="rank-name">かぶ</div>
-        <div class="rank-reason">入荷量50t、中値119円</div>
-        <div class="score-bar"><div class="score-fill" style="width:81%;background:#52b788"></div></div>
-        <div class="rank-score-label">81点</div>
+        <div class="retail-price">🏪 約230円<span class="per100g">/100g</span></div>
+        <div class="rank-reason">スーパー目安 約230円/100g、入荷量743t</div>
+        <div class="score-bar"><div class="score-fill" style="width:85%;background:#52b788"></div></div>
+        <div class="rank-score-label">85点</div>
       </div>
     </div>
     <div class="rank-card">
       <div class="rank-img-wrap">
         <img class="rank-img" src="https://source.unsplash.com/400x400/?spinach,vegetable,food" alt="ほうれんそう" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
-        <span class="rank-medal">🥉</span>
+        <span class="rank-medal">🥈</span>
         <span class="badge badge-down">↓92%</span>
       </div>
       <div class="rank-body">
         <div class="rank-name">ほうれんそう</div>
-        <div class="rank-reason">入荷量63t、中値90円</div>
+        <div class="retail-price">🏪 約20円<span class="per100g">/100g</span></div>
+        <div class="rank-reason">スーパー目安 約20円/100g、入荷量63t</div>
         <div class="score-bar"><div class="score-fill" style="width:81%;background:#52b788"></div></div>
         <div class="rank-score-label">81点</div>
+      </div>
+    </div>
+    <div class="rank-card">
+      <div class="rank-img-wrap">
+        <img class="rank-img" src="https://source.unsplash.com/400x400/?かぶ,vegetable,food" alt="かぶ" loading="lazy" onerror="this.src='https://source.unsplash.com/400x400/?vegetable'">
+        <span class="rank-medal">🥉</span>
+        <span class="badge badge-down">↓86%</span>
+      </div>
+      <div class="rank-body">
+        <div class="rank-name">かぶ</div>
+        <div class="retail-price">🏪 約30円<span class="per100g">/100g</span></div>
+        <div class="rank-reason">スーパー目安 約30円/100g、入荷量50t</div>
+        <div class="score-bar"><div class="score-fill" style="width:80%;background:#52b788"></div></div>
+        <div class="rank-score-label">80点</div>
       </div>
     </div>
     <div class="rank-card">
@@ -152,7 +157,8 @@
       </div>
       <div class="rank-body">
         <div class="rank-name">だいこん</div>
-        <div class="rank-reason">入荷量357t、中値821円</div>
+        <div class="retail-price">🏪 約160円<span class="per100g">/100g</span></div>
+        <div class="rank-reason">スーパー目安 約160円/100g、入荷量357t</div>
         <div class="score-bar"><div class="score-fill" style="width:79%;background:#52b788"></div></div>
         <div class="rank-score-label">79点</div>
       </div>
@@ -165,7 +171,8 @@
       </div>
       <div class="rank-body">
         <div class="rank-name">こまつな</div>
-        <div class="rank-reason">入荷量57t、中値56円</div>
+        <div class="retail-price">🏪 約10円<span class="per100g">/100g</span></div>
+        <div class="rank-reason">スーパー目安 約10円/100g、入荷量57t</div>
         <div class="score-bar"><div class="score-fill" style="width:79%;background:#52b788"></div></div>
         <div class="rank-score-label">79点</div>
       </div>
@@ -177,28 +184,15 @@
     <div class="recipe-grid">
     <div class="recipe-card">
       <div class="recipe-img-wrap">
-        <img class="recipe-img" src="https://source.unsplash.com/400x400/?cabbage,vegetable,food" alt="キャベツとツナの無限サラダ" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
-        <div class="recipe-time-badge">🕐 10分</div>
+        <img class="recipe-img" src="https://source.unsplash.com/400x400/?cabbage,vegetable,food" alt="無限やみつきキャベツ" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
+        <div class="recipe-time-badge">🕐 5分</div>
       </div>
       <div class="recipe-body">
         <div class="recipe-tag">キャベツ</div>
-        <h3 class="recipe-title">キャベツとツナの無限サラダ</h3>
+        <h3 class="recipe-title">無限やみつきキャベツ</h3>
         <div class="recipe-serving">👥 2人分</div>
-        <div class="recipe-ings"><span class='ing'>キャベツ 1/4個</span><span class='ing'>ツナ缶 1缶</span><span class='ing'>ごま油 大さじ1</span><span class='ing'>鶏がらスープの素 小さじ1</span><span class='ing'>白ごま 適量</span></div>
-        <ol class="recipe-steps"><li>キャベツを千切りにし、塩少々(分量外)で揉んで水気を絞る</li><li>油を切ったツナ、ごま油、鶏がらスープの素を加えて和える</li><li>仕上げに白ごまを振る</li></ol>
-      </div>
-    </div>
-    <div class="recipe-card">
-      <div class="recipe-img-wrap">
-        <img class="recipe-img" src="https://source.unsplash.com/400x400/?かぶ,vegetable,food" alt="かぶのまるごとポタージュ" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
-        <div class="recipe-time-badge">🕐 20分</div>
-      </div>
-      <div class="recipe-body">
-        <div class="recipe-tag">かぶ</div>
-        <h3 class="recipe-title">かぶのまるごとポタージュ</h3>
-        <div class="recipe-serving">👥 2人分</div>
-        <div class="recipe-ings"><span class='ing'>かぶ 2個</span><span class='ing'>玉ねぎ 1/4個</span><span class='ing'>牛乳 200ml</span><span class='ing'>コンソメ 小さじ1</span><span class='ing'>バター 10g</span><span class='ing'>塩こしょう 少々</span></div>
-        <ol class="recipe-steps"><li>かぶと玉ねぎを薄切りにし、バターで炒める</li><li>水100mlとコンソメを加え、柔らかくなるまで煮る</li><li>ミキサーにかけ、牛乳を加えて温め、塩こしょうで味を調える</li></ol>
+        <div class="recipe-ings"><span class='ing'>キャベツ 1/4個</span><span class='ing'>ごま油 大さじ1</span><span class='ing'>鶏がらスープの素 小さじ1</span><span class='ing'>塩 少々</span><span class='ing'>白ごま 適量</span></div>
+        <ol class="recipe-steps"><li>キャベツをざく切りにしてボウルに入れる</li><li>ごま油・鶏がらスープの素・塩を加えてよく和える</li><li>白ごまを振って完成</li></ol>
       </div>
     </div>
     <div class="recipe-card">
@@ -211,7 +205,20 @@
         <h3 class="recipe-title">ほうれんそうのごま和え</h3>
         <div class="recipe-serving">👥 2人分</div>
         <div class="recipe-ings"><span class='ing'>ほうれんそう 1束</span><span class='ing'>すりごま 大さじ2</span><span class='ing'>醤油 大さじ1</span><span class='ing'>砂糖 小さじ1</span></div>
-        <ol class="recipe-steps"><li>ほうれんそうを茹で、冷水にさらして水気を絞り3cmに切る</li><li>すりごま、醤油、砂糖を混ぜ合わせる</li><li>ほうれんそうと和えて器に盛る</li></ol>
+        <ol class="recipe-steps"><li>ほうれんそうを塩茹でして冷水にとり、水気を絞って4cmに切る</li><li>すりごま・醤油・砂糖を混ぜ合わせる</li><li>ほうれんそうを和えて器に盛る</li></ol>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-img-wrap">
+        <img class="recipe-img" src="https://source.unsplash.com/400x400/?かぶ,vegetable,food" alt="かぶの浅漬け" loading="lazy" onerror="this.src='https://source.unsplash.com/600x400/?cooking,vegetable'">
+        <div class="recipe-time-badge">🕐 15分</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-tag">かぶ</div>
+        <h3 class="recipe-title">かぶの浅漬け</h3>
+        <div class="recipe-serving">👥 2人分</div>
+        <div class="recipe-ings"><span class='ing'>かぶ 2個</span><span class='ing'>塩 小さじ1/2</span><span class='ing'>昆布茶 小さじ1</span><span class='ing'>ゆず皮 少々</span></div>
+        <ol class="recipe-steps"><li>かぶを薄切りにし、葉は小口切りにする</li><li>ポリ袋にすべての材料を入れて揉み込む</li><li>10分ほど置いて味をなじませて完成</li></ol>
       </div>
     </div></div>
   </div>
@@ -273,7 +280,7 @@
 
 </div>
 <footer>
-  更新: 2026-04-24 02:25 JST &nbsp;|&nbsp;
+  更新: 2026-04-24 02:28 JST &nbsp;|&nbsp;
   データ: <a href="https://www.shijou.metro.tokyo.lg.jp/" target="_blank">東京都中央卸売市場</a>
 </footer>
 </body>

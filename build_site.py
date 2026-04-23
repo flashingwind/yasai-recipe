@@ -116,6 +116,8 @@ def render_ranking(recipe_data, items):
         wow = wow_badge(market.get("前週比%", ""))
         img = veggie_img(name)
         m = medal.get(rank, f"#{rank}")
+        retail = r.get("retail_price")
+        price_html = f'<div class="retail-price">🏪 約{retail}円<span class="per100g">/100g</span></div>' if retail else ""
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap">
@@ -125,6 +127,7 @@ def render_ranking(recipe_data, items):
       </div>
       <div class="rank-body">
         <div class="rank-name">{name}</div>
+        {price_html}
         <div class="rank-reason">{reason}</div>
         {score_bar(score)}
         <div class="rank-score-label">{score}点</div>
@@ -241,6 +244,8 @@ HTML_TEMPLATE = """\
     .score-bar{{background:#eee;border-radius:4px;height:6px;margin-bottom:4px}}
     .score-fill{{height:6px;border-radius:4px;transition:width .6s ease}}
     .rank-score-label{{font-size:.75rem;color:#aaa;text-align:right}}
+    .retail-price{{font-size:1rem;font-weight:900;color:#e63946;margin-bottom:4px}}
+    .per100g{{font-size:.7rem;font-weight:400;color:#aaa;margin-left:2px}}
 
     /* バッジ */
     .badge{{display:inline-block;border-radius:12px;padding:2px 8px;font-size:.72rem;
