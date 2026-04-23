@@ -56,12 +56,12 @@ def calculate_score(item, rules, max_values):
     # 手頃さ
     affordability = (1 - price / max_values["price"]) * 100 if max_values["price"] > 0 else 0
 
-    # 総合スコア
+    # 総合スコア（価格優先、次に旬・流通量）
     score = (
-        0.30 * richness +
-        0.15 * trend +
-        0.25 * seasonality +
-        0.30 * affordability
+        0.50 * affordability +
+        0.30 * seasonality +
+        0.15 * richness +
+        0.05 * trend
     )
     return int(score)
 
