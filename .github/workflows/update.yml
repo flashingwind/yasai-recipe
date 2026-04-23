@@ -21,7 +21,7 @@ jobs:
           python-version: "3.11"
 
       - name: 依存パッケージインストール
-        run: pip install requests beautifulsoup4 pypdf anthropic
+        run: pip install requests beautifulsoup4 pypdf anthropic openai
 
       - name: .cacheディレクトリ復元
         uses: actions/cache@v4
@@ -29,6 +29,11 @@ jobs:
           path: .cache
           key: market-cache-${{ github.run_id }}
           restore-keys: market-cache-
+
+      - name: 野菜画像生成（未生成のみ）
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python generate_images.py
 
       - name: 市況データ取得
         run: python scrape_market_comment.py

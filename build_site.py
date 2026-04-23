@@ -14,48 +14,43 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(BASE, "docs")
 os.makedirs(DOCS, exist_ok=True)
 
-# 野菜名 → (絵文字, 背景色)
-# Twemojiで統一表示するため絵文字コードポイントからSVG URLを生成
-VEGGIE_EMOJI = {
-    "キャベツ":     ("🥬", "#d4edda"),
-    "だいこん":     ("🥕", "#fff3e0"),  # 大根専用絵文字なし→にんじんで代用しない、白背景
-    "はくさい":     ("🥬", "#e8f5e9"),
-    "レタス":       ("🥗", "#c8e6c9"),
-    "きゅうり":     ("🥒", "#a5d6a7"),
-    "トマト":       ("🍅", "#ffcdd2"),
-    "ほうれんそう": ("🌿", "#b2dfdb"),
-    "ねぎ":         ("🌱", "#f9fbe7"),
-    "たまねぎ":     ("🧅", "#ffe0b2"),
-    "にんじん":     ("🥕", "#ffe0b2"),
-    "じゃがいも":   ("🥔", "#f5f5dc"),
-    "さつまいも":   ("🍠", "#f8bbd0"),
-    "なす":         ("🍆", "#e1bee7"),
-    "ピーマン":     ("🫑", "#c5e1a5"),
-    "ブロッコリー": ("🥦", "#aed581"),
-    "カリフラワー": ("🥦", "#f5f5f5"),
-    "ごぼう":       ("🌾", "#efebe9"),
-    "れんこん":     ("🪷", "#fce4ec"),
-    "かぼちゃ":     ("🎃", "#fff3e0"),
-    "アスパラガス": ("🌱", "#dcedc8"),
-    "えだまめ":     ("🫘", "#c8e6c9"),
-    "かぶ":         ("🌸", "#fce4ec"),
-    "こまつな":     ("🌿", "#b2dfdb"),
-    "しょうが":     ("🌶", "#fff9c4"),
-    "にんにく":     ("🧄", "#fffde7"),
-    "セロリ":       ("🌿", "#ccff90"),
-    "チンゲンサイ": ("🥬", "#e0f2f1"),
-    "みずな":       ("🌿", "#e8f5e9"),
+# 野菜名 → (画像ファイル名, 背景色)
+VEGGIE_IMG = {
+    "キャベツ":     ("cabbage",     "#d4edda"),
+    "だいこん":     ("daikon",      "#f0f0f0"),
+    "はくさい":     ("hakusai",     "#e8f5e9"),
+    "レタス":       ("lettuce",     "#c8e6c9"),
+    "きゅうり":     ("cucumber",    "#a5d6a7"),
+    "トマト":       ("tomato",      "#ffcdd2"),
+    "ほうれんそう": ("spinach",     "#b2dfdb"),
+    "ねぎ":         ("negi",        "#f9fbe7"),
+    "たまねぎ":     ("onion",       "#ffe0b2"),
+    "にんじん":     ("carrot",      "#ffe0b2"),
+    "じゃがいも":   ("potato",      "#f5f5dc"),
+    "さつまいも":   ("satsumaimo",  "#f8bbd0"),
+    "なす":         ("eggplant",    "#e1bee7"),
+    "ピーマン":     ("pepper",      "#c5e1a5"),
+    "ブロッコリー": ("broccoli",    "#aed581"),
+    "カリフラワー": ("cauliflower", "#f5f5f5"),
+    "ごぼう":       ("gobou",       "#efebe9"),
+    "れんこん":     ("renkon",      "#fce4ec"),
+    "かぼちゃ":     ("kabocha",     "#fff3e0"),
+    "アスパラガス": ("asparagus",   "#dcedc8"),
+    "えだまめ":     ("edamame",     "#c8e6c9"),
+    "かぶ":         ("kabu",        "#fce4ec"),
+    "こまつな":     ("komatsuna",   "#b2dfdb"),
+    "しょうが":     ("ginger",      "#fff9c4"),
+    "にんにく":     ("garlic",      "#fffde7"),
+    "セロリ":       ("celery",      "#ccff90"),
+    "チンゲンサイ": ("bokchoy",     "#e0f2f1"),
+    "みずな":       ("mizuna",      "#e8f5e9"),
 }
-FALLBACK_EMOJI = ("🥬", "#e8f5e9")
-
-def _twemoji_url(emoji):
-    """絵文字 → Twemoji CDN の SVG URL"""
-    codepoints = "-".join(f"{ord(c):x}" for c in emoji if ord(c) != 0xfe0f)
-    return f"https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/{codepoints}.svg"
+FALLBACK_IMG = ("fallback", "#f5f5f0")
 
 def veggie_visual(name):
-    emoji, bg = VEGGIE_EMOJI.get(name, FALLBACK_EMOJI)
-    return _twemoji_url(emoji), bg
+    filename, bg = VEGGIE_IMG.get(name, FALLBACK_IMG)
+    path = f"img/{filename}.png"
+    return path, bg
 
 
 # ── データ読込 ────────────────────────────────────────────────────────────────
@@ -153,7 +148,7 @@ def render_ranking(recipe_data, items):
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:{bg}">
-        <img class="veggie-emoji" src="{emoji}" alt="{name}">
+        <img class="veggie-emoji" src="{emoji}" alt="{name}" onerror="this.src='img/fallback.png'">
         <span class="rank-medal">{m}</span>
         {wow}
       </div>
