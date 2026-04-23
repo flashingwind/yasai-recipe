@@ -128,6 +128,8 @@ def render_ranking(recipe_data, items):
         m = medal.get(rank, f"#{rank}")
         retail = r.get("retail_price")
         price_html = f'<div class="retail-price">🏪 約{retail}円<span class="per100g">/100g</span></div>' if retail else ""
+        comment = r.get("comment", "")
+        comment_html = f'<div class="card-comment">{comment}<span class="comment-src">Claude - 東京都中央卸売市場</span></div>' if comment else ""
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:{bg}">
@@ -138,7 +140,7 @@ def render_ranking(recipe_data, items):
       <div class="rank-body">
         <div class="rank-name">{name}</div>
         {price_html}
-        <div class="rank-reason">{reason}</div>
+        {comment_html}
         {score_bar(score)}
         <div class="rank-score-label">{score}点</div>
       </div>
@@ -258,6 +260,8 @@ HTML_TEMPLATE = """\
     .rank-score-label{{font-size:.75rem;color:#aaa;text-align:right}}
     .retail-price{{font-size:1rem;font-weight:900;color:#e63946;margin-bottom:4px}}
     .per100g{{font-size:.7rem;font-weight:400;color:#aaa;margin-left:2px}}
+    .card-comment{{font-size:.78rem;color:#555;line-height:1.5;margin-bottom:6px}}
+    .comment-src{{display:block;font-size:.68rem;color:#bbb;margin-top:3px}}
 
     /* バッジ */
     .badge{{display:inline-block;border-radius:12px;padding:2px 8px;font-size:.72rem;
@@ -323,10 +327,6 @@ HTML_TEMPLATE = """\
     {recipes_html}
   </div>
 
-  <div class="section">
-    <div class="section-title">📦 今週の市況一覧</div>
-    {market_grid_html}
-  </div>
 
 </div>
 <footer>
@@ -351,7 +351,6 @@ def build():
         market_comment_html=market_comment_html,
         ranking_html=render_ranking(recipe_data, items),
         recipes_html=render_recipes(recipe_data),
-        market_grid_html=render_market_grid(items, recipe_data),
         updated_at=datetime.now().strftime("%Y-%m-%d %H:%M JST"),
     )
 

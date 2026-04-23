@@ -242,12 +242,15 @@ def generate_recipe_and_comment(market_summary, top_items, market_comment):
 
 {items_str}
 
-市況コメント（参考）：
+市況コメント（参考・東京都中央卸売市場）：
 {market_comment or "特にコメントなし"}
 
 この情報をもとに、以下の JSON を生成してください：
 {{
   "market_comment": "消費者向けの簡潔な市況説明（1～2文、価格と旬に言及）",
+  "ranking_comments": {{
+    "野菜名": "その野菜のおすすめ理由（1文、価格・旬・食べ方のヒントを含む）"
+  }},
   "recipes": [
     {{
       "title": "レシピ名",
@@ -260,6 +263,7 @@ def generate_recipe_and_comment(market_summary, top_items, market_comment):
   ]
 }}
 
+ranking_comments はランキング全品目分を生成してください。
 レシピは上位3品目分（簡潔に）を生成してください。"""
 
     response = client.messages.create(
@@ -353,6 +357,10 @@ def main():
         )
         market_comment = build_comment(items)
         recipe_data = generate_recipe_and_comment("", top_items, market_comment)
+
+        ranking_comments = recipe_data.get("ranking_comments", {})
+        for entry in ranking:
+            entry["comment"] = ranking_comments.get(entry["item"], "")
 
         result = {
             "week": week,

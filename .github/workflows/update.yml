@@ -2,8 +2,8 @@ name: 市況データ更新・サイトビルド
 
 on:
   schedule:
-    # 毎週金曜 JST 9:00 (UTC 0:00) に実行
-    - cron: "0 0 * * 5"
+    # 毎日 JST 9:00 (UTC 0:00) に実行
+    - cron: "0 0 * * *"
   workflow_dispatch: # 手動実行も可能
 
 jobs:

@@ -51,6 +51,8 @@
     .rank-score-label{font-size:.75rem;color:#aaa;text-align:right}
     .retail-price{font-size:1rem;font-weight:900;color:#e63946;margin-bottom:4px}
     .per100g{font-size:.7rem;font-weight:400;color:#aaa;margin-left:2px}
+    .card-comment{font-size:.78rem;color:#555;line-height:1.5;margin-bottom:6px}
+    .comment-src{display:block;font-size:.68rem;color:#bbb;margin-top:3px}
 
     /* バッジ */
     .badge{display:inline-block;border-radius:12px;padding:2px 8px;font-size:.72rem;
@@ -107,7 +109,7 @@
 
   <div class="section">
     <div class="section-title">🏆 今週のおすすめランキング</div>
-    <div class="comment-box">今週はキャベツがやや高値（約230円/100g）の強保合ですが、ほうれんそうとかぶはお手頃価格でおすすめ。葉物野菜が旬を迎え、甘みと栄養が豊富な時期です。</div>
+    <div class="comment-box">今週は全体の入荷量が前週比3%増と安定していますが、キャベツは神奈川県産が強保合で価格やや高め。一方、ほうれんそうやかぶは入荷減ながらお手頃価格で、春の葉物・根菜が旬の食卓にぴったりです。</div>
     <div class="rank-grid">
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:#d4edda">
@@ -118,7 +120,7 @@
       <div class="rank-body">
         <div class="rank-name">キャベツ</div>
         <div class="retail-price">🏪 約230円<span class="per100g">/100g</span></div>
-        <div class="rank-reason">スーパー目安 約230円/100g、入荷量743t</div>
+        <div class="card-comment">神奈川県産が出回り甘みの増す春キャベツの時期、やや高値ですが生食でも加熱でも美味しく、サラダや蒸し料理で素材の甘さを楽しめます。<span class="comment-src">Claude - 東京都中央卸売市場</span></div>
         <div class="score-bar"><div class="score-fill" style="width:85%;background:#52b788"></div></div>
         <div class="rank-score-label">85点</div>
       </div>
@@ -132,7 +134,7 @@
       <div class="rank-body">
         <div class="rank-name">ほうれんそう</div>
         <div class="retail-price">🏪 約20円<span class="per100g">/100g</span></div>
-        <div class="rank-reason">スーパー目安 約20円/100g、入荷量63t</div>
+        <div class="card-comment">100g約20円と今週特にお買い得で、鉄分豊富な葉物の代表格。さっと茹でておひたしや炒め物にすれば彩りよく栄養満点です。<span class="comment-src">Claude - 東京都中央卸売市場</span></div>
         <div class="score-bar"><div class="score-fill" style="width:81%;background:#52b788"></div></div>
         <div class="rank-score-label">81点</div>
       </div>
@@ -146,7 +148,7 @@
       <div class="rank-body">
         <div class="rank-name">かぶ</div>
         <div class="retail-price">🏪 約30円<span class="per100g">/100g</span></div>
-        <div class="rank-reason">スーパー目安 約30円/100g、入荷量50t</div>
+        <div class="card-comment">入荷は減少傾向ですが100g約30円とリーズナブル、やわらかい春のかぶは根は煮物や浅漬け、葉も炒め物で余さず使えるのが魅力です。<span class="comment-src">Claude - 東京都中央卸売市場</span></div>
         <div class="score-bar"><div class="score-fill" style="width:80%;background:#52b788"></div></div>
         <div class="rank-score-label">80点</div>
       </div>
@@ -160,7 +162,7 @@
       <div class="rank-body">
         <div class="rank-name">だいこん</div>
         <div class="retail-price">🏪 約160円<span class="per100g">/100g</span></div>
-        <div class="rank-reason">スーパー目安 約160円/100g、入荷量357t</div>
+        
         <div class="score-bar"><div class="score-fill" style="width:79%;background:#52b788"></div></div>
         <div class="rank-score-label">79点</div>
       </div>
@@ -174,7 +176,7 @@
       <div class="rank-body">
         <div class="rank-name">こまつな</div>
         <div class="retail-price">🏪 約10円<span class="per100g">/100g</span></div>
-        <div class="rank-reason">スーパー目安 約10円/100g、入荷量57t</div>
+        
         <div class="score-bar"><div class="score-fill" style="width:79%;background:#52b788"></div></div>
         <div class="rank-score-label">79点</div>
       </div>
@@ -187,112 +189,48 @@
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:#d4edda">
         <span class="veggie-emoji">🥬</span>
-        <div class="recipe-time-badge">🕐 5分</div>
+        <div class="recipe-time-badge">🕐 10分</div>
       </div>
       <div class="recipe-body">
         <div class="recipe-tag">キャベツ</div>
-        <h3 class="recipe-title">無限やみつきキャベツ</h3>
+        <h3 class="recipe-title">春キャベツのうま塩蒸し</h3>
         <div class="recipe-serving">👥 2人分</div>
-        <div class="recipe-ings"><span class='ing'>キャベツ 1/4個</span><span class='ing'>ごま油 大さじ1</span><span class='ing'>鶏がらスープの素 小さじ1</span><span class='ing'>塩 少々</span><span class='ing'>白ごま 適量</span></div>
-        <ol class="recipe-steps"><li>キャベツをざく切りにしてボウルに入れる</li><li>ごま油・鶏がらスープの素・塩を加えてよく和える</li><li>白ごまを振って完成</li></ol>
+        <div class="recipe-ings"><span class='ing'>春キャベツ 1/4個</span><span class='ing'>ごま油 大さじ1</span><span class='ing'>塩 小さじ1/2</span><span class='ing'>鶏がらスープの素 小さじ1</span><span class='ing'>水 大さじ2</span><span class='ing'>白ごま 適量</span></div>
+        <ol class="recipe-steps"><li>キャベツをざく切りにしてフライパンに入れる</li><li>ごま油・塩・鶏がらスープの素・水を加え蓋をして中火で5分蒸す</li><li>全体を混ぜ白ごまを振って完成</li></ol>
       </div>
     </div>
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:#b2dfdb">
         <span class="veggie-emoji">🌿</span>
-        <div class="recipe-time-badge">🕐 10分</div>
+        <div class="recipe-time-badge">🕐 8分</div>
       </div>
       <div class="recipe-body">
         <div class="recipe-tag">ほうれんそう</div>
-        <h3 class="recipe-title">ほうれんそうのごま和え</h3>
+        <h3 class="recipe-title">ほうれんそうの胡麻和え</h3>
         <div class="recipe-serving">👥 2人分</div>
-        <div class="recipe-ings"><span class='ing'>ほうれんそう 1束</span><span class='ing'>すりごま 大さじ2</span><span class='ing'>醤油 大さじ1</span><span class='ing'>砂糖 小さじ1</span></div>
-        <ol class="recipe-steps"><li>ほうれんそうを塩茹でして冷水にとり、水気を絞って4cmに切る</li><li>すりごま・醤油・砂糖を混ぜ合わせる</li><li>ほうれんそうを和えて器に盛る</li></ol>
+        <div class="recipe-ings"><span class='ing'>ほうれんそう 1束</span><span class='ing'>すりごま 大さじ2</span><span class='ing'>醤油 大さじ1</span><span class='ing'>砂糖 小さじ2</span></div>
+        <ol class="recipe-steps"><li>ほうれんそうを熱湯で1分茹で冷水にとり水気を絞る</li><li>3cm幅に切りボウルに入れる</li><li>すりごま・醤油・砂糖を混ぜ和えれば完成</li></ol>
       </div>
     </div>
     <div class="recipe-card">
       <div class="recipe-img-wrap" style="background:#fce4ec">
         <span class="veggie-emoji">🫛</span>
-        <div class="recipe-time-badge">🕐 15分</div>
+        <div class="recipe-time-badge">🕐 10分</div>
       </div>
       <div class="recipe-body">
         <div class="recipe-tag">かぶ</div>
-        <h3 class="recipe-title">かぶの浅漬け</h3>
+        <h3 class="recipe-title">かぶと葉の浅漬け</h3>
         <div class="recipe-serving">👥 2人分</div>
-        <div class="recipe-ings"><span class='ing'>かぶ 2個</span><span class='ing'>塩 小さじ1/2</span><span class='ing'>昆布茶 小さじ1</span><span class='ing'>ゆず皮 少々</span></div>
-        <ol class="recipe-steps"><li>かぶを薄切りにし、葉は小口切りにする</li><li>ポリ袋にすべての材料を入れて揉み込む</li><li>10分ほど置いて味をなじませて完成</li></ol>
+        <div class="recipe-ings"><span class='ing'>かぶ 2個（葉付き）</span><span class='ing'>塩 小さじ1</span><span class='ing'>昆布茶 小さじ1/2</span><span class='ing'>輪切り唐辛子 少々</span></div>
+        <ol class="recipe-steps"><li>かぶの根は薄切り、葉は小口切りにする</li><li>ポリ袋にすべての材料を入れ軽く揉む</li><li>冷蔵庫で10分ほど置き味をなじませる</li></ol>
       </div>
     </div></div>
   </div>
 
-  <div class="section">
-    <div class="section-title">📦 今週の市況一覧</div>
-    <div class="market-grid">
-    <div class="market-card">
-      <div class="market-img-wrap" style="background:#f0f0f0">
-        <span class="veggie-emoji-sm">🫚</span>
-      </div>
-      <div class="market-body">
-        <div class="market-name">だいこん<span class="badge badge-down">↓97%</span></div>
-        <div class="market-stats">
-          <span>📦 357t</span>
-          <span>💴 821円</span>
-        </div>
-      </div>
-    </div>
-    <div class="market-card">
-      <div class="market-img-wrap" style="background:#fce4ec">
-        <span class="veggie-emoji-sm">🫛</span>
-      </div>
-      <div class="market-body">
-        <div class="market-name">かぶ<span class="badge badge-down">↓86%</span></div>
-        <div class="market-stats">
-          <span>📦 50t</span>
-          <span>💴 119円</span>
-        </div>
-      </div>
-    </div>
-    <div class="market-card">
-      <div class="market-img-wrap" style="background:#d4edda">
-        <span class="veggie-emoji-sm">🥬</span>
-      </div>
-      <div class="market-body">
-        <div class="market-name">キャベツ<span class="badge badge-flat">→100%</span></div>
-        <div class="market-stats">
-          <span>📦 743t</span>
-          <span>💴 1382円</span>
-        </div>
-      </div>
-    </div>
-    <div class="market-card">
-      <div class="market-img-wrap" style="background:#b2dfdb">
-        <span class="veggie-emoji-sm">🌿</span>
-      </div>
-      <div class="market-body">
-        <div class="market-name">こまつな<span class="badge badge-down">↓95%</span></div>
-        <div class="market-stats">
-          <span>📦 57t</span>
-          <span>💴 56円</span>
-        </div>
-      </div>
-    </div>
-    <div class="market-card">
-      <div class="market-img-wrap" style="background:#b2dfdb">
-        <span class="veggie-emoji-sm">🌿</span>
-      </div>
-      <div class="market-body">
-        <div class="market-name">ほうれんそう<span class="badge badge-down">↓92%</span></div>
-        <div class="market-stats">
-          <span>📦 63t</span>
-          <span>💴 90円</span>
-        </div>
-      </div>
-    </div></div>
-  </div>
 
 </div>
 <footer>
-  更新: 2026-04-24 02:43 JST &nbsp;|&nbsp;
+  更新: 2026-04-24 02:50 JST &nbsp;|&nbsp;
   データ: <a href="https://www.shijou.metro.tokyo.lg.jp/" target="_blank">東京都中央卸売市場</a>
 </footer>
 </body>
