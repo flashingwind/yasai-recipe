@@ -150,7 +150,7 @@ HTML_TEMPLATE = """\
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>果実市況・レシピ提案</title>
+  <title>野菜市況・レシピ提案</title>
   <style>
     *{{box-sizing:border-box;margin:0;padding:0}}
     body{{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;
@@ -192,7 +192,7 @@ HTML_TEMPLATE = """\
 </head>
 <body>
 <header>
-  <h1>🍊 果実市況・レシピ提案</h1>
+  <h1>🥬 野菜市況・レシピ提案</h1>
   <span class="week">{week}</span>
 </header>
 <div class="container">

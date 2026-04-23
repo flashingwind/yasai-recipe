@@ -156,8 +156,8 @@ def generate_recipe_and_comment(market_summary, top_items, market_comment):
     """Claude API でレシピとコメントを生成（キャッシュ可能）"""
     client = anthropic.Anthropic()
 
-    system_prompt = """あなたは青果マーケティングのプロです。
-市況データをもとに、消費者向けのコメントと簡単レシピを生成します。"""
+    system_prompt = """あなたは野菜料理のプロです。
+野菜の市況データをもとに、消費者向けのコメントと簡単レシピを生成します。"""
 
     items_str = "\n".join(f"- {item}: {score}点" for item, score in top_items)
 
