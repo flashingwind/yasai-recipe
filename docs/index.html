@@ -37,8 +37,10 @@
     .rank-card{background:#fff;border-radius:16px;overflow:hidden;
                 box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .2s}
     .rank-card:hover{transform:translateY(-4px)}
-    .rank-img-wrap{position:relative}
-    .rank-img{width:100%;aspect-ratio:1;object-fit:cover}
+    .rank-img-wrap{position:relative;width:100%;aspect-ratio:1;
+                    display:flex;align-items:center;justify-content:center}
+    .veggie-emoji{font-size:4rem;line-height:1;user-select:none}
+    .veggie-emoji-sm{font-size:2.5rem;line-height:1;user-select:none}
     .rank-medal{position:absolute;top:8px;left:8px;font-size:1.6rem;
                  filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
     .rank-body{padding:12px}
@@ -62,8 +64,8 @@
     .recipe-card{background:#fff;border-radius:16px;overflow:hidden;
                   box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .2s}
     .recipe-card:hover{transform:translateY(-4px)}
-    .recipe-img-wrap{position:relative}
-    .recipe-img{width:100%;height:180px;object-fit:cover}
+    .recipe-img-wrap{position:relative;width:100%;height:180px;
+                      display:flex;align-items:center;justify-content:center}
     .recipe-time-badge{position:absolute;bottom:10px;right:10px;
                         background:rgba(0,0,0,.55);color:#fff;border-radius:12px;
                         padding:4px 10px;font-size:.78rem;backdrop-filter:blur(4px)}
@@ -83,7 +85,7 @@
     .market-card{background:#fff;border-radius:14px;overflow:hidden;
                   box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .2s}
     .market-card:hover{transform:translateY(-3px)}
-    .market-img{width:100%;aspect-ratio:1;object-fit:cover}
+    .market-img-wrap{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
     .market-body{padding:10px}
     .market-name{font-size:.85rem;font-weight:700;margin-bottom:6px;
                   display:flex;align-items:center;gap:4px;flex-wrap:wrap}
@@ -108,8 +110,8 @@
     <div class="comment-box">今週はキャベツがやや高値（約230円/100g）の強保合ですが、ほうれんそうとかぶはお手頃価格でおすすめ。葉物野菜が旬を迎え、甘みと栄養が豊富な時期です。</div>
     <div class="rank-grid">
     <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cabbage_and_cross_section_on_white.jpg/400px-Cabbage_and_cross_section_on_white.jpg" alt="キャベツ" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="rank-img-wrap" style="background:#d4edda">
+        <span class="veggie-emoji">🥬</span>
         <span class="rank-medal">🥇</span>
         <span class="badge badge-flat">→100%</span>
       </div>
@@ -122,8 +124,8 @@
       </div>
     </div>
     <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Spinach_leaves.jpg/400px-Spinach_leaves.jpg" alt="ほうれんそう" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="rank-img-wrap" style="background:#b2dfdb">
+        <span class="veggie-emoji">🌿</span>
         <span class="rank-medal">🥈</span>
         <span class="badge badge-down">↓92%</span>
       </div>
@@ -136,8 +138,8 @@
       </div>
     </div>
     <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Turnip_2622027.jpg/400px-Turnip_2622027.jpg" alt="かぶ" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="rank-img-wrap" style="background:#fce4ec">
+        <span class="veggie-emoji">🫛</span>
         <span class="rank-medal">🥉</span>
         <span class="badge badge-down">↓86%</span>
       </div>
@@ -150,8 +152,8 @@
       </div>
     </div>
     <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Daikon_Radish.jpg/400px-Daikon_Radish.jpg" alt="だいこん" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="rank-img-wrap" style="background:#f0f0f0">
+        <span class="veggie-emoji">🫚</span>
         <span class="rank-medal">#4</span>
         <span class="badge badge-down">↓97%</span>
       </div>
@@ -164,8 +166,8 @@
       </div>
     </div>
     <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Komatsuna.jpg/400px-Komatsuna.jpg" alt="こまつな" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="rank-img-wrap" style="background:#b2dfdb">
+        <span class="veggie-emoji">🌿</span>
         <span class="rank-medal">#5</span>
         <span class="badge badge-down">↓95%</span>
       </div>
@@ -183,8 +185,8 @@
     <div class="section-title">🍳 今週の簡単レシピ</div>
     <div class="recipe-grid">
     <div class="recipe-card">
-      <div class="recipe-img-wrap">
-        <img class="recipe-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cabbage_and_cross_section_on_white.jpg/400px-Cabbage_and_cross_section_on_white.jpg" alt="無限やみつきキャベツ" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="recipe-img-wrap" style="background:#d4edda">
+        <span class="veggie-emoji">🥬</span>
         <div class="recipe-time-badge">🕐 5分</div>
       </div>
       <div class="recipe-body">
@@ -196,8 +198,8 @@
       </div>
     </div>
     <div class="recipe-card">
-      <div class="recipe-img-wrap">
-        <img class="recipe-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Spinach_leaves.jpg/400px-Spinach_leaves.jpg" alt="ほうれんそうのごま和え" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="recipe-img-wrap" style="background:#b2dfdb">
+        <span class="veggie-emoji">🌿</span>
         <div class="recipe-time-badge">🕐 10分</div>
       </div>
       <div class="recipe-body">
@@ -209,8 +211,8 @@
       </div>
     </div>
     <div class="recipe-card">
-      <div class="recipe-img-wrap">
-        <img class="recipe-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Turnip_2622027.jpg/400px-Turnip_2622027.jpg" alt="かぶの浅漬け" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="recipe-img-wrap" style="background:#fce4ec">
+        <span class="veggie-emoji">🫛</span>
         <div class="recipe-time-badge">🕐 15分</div>
       </div>
       <div class="recipe-body">
@@ -227,7 +229,9 @@
     <div class="section-title">📦 今週の市況一覧</div>
     <div class="market-grid">
     <div class="market-card">
-      <img class="market-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Daikon_Radish.jpg/400px-Daikon_Radish.jpg" alt="だいこん" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="market-img-wrap" style="background:#f0f0f0">
+        <span class="veggie-emoji-sm">🫚</span>
+      </div>
       <div class="market-body">
         <div class="market-name">だいこん<span class="badge badge-down">↓97%</span></div>
         <div class="market-stats">
@@ -237,7 +241,9 @@
       </div>
     </div>
     <div class="market-card">
-      <img class="market-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Turnip_2622027.jpg/400px-Turnip_2622027.jpg" alt="かぶ" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="market-img-wrap" style="background:#fce4ec">
+        <span class="veggie-emoji-sm">🫛</span>
+      </div>
       <div class="market-body">
         <div class="market-name">かぶ<span class="badge badge-down">↓86%</span></div>
         <div class="market-stats">
@@ -247,7 +253,9 @@
       </div>
     </div>
     <div class="market-card">
-      <img class="market-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cabbage_and_cross_section_on_white.jpg/400px-Cabbage_and_cross_section_on_white.jpg" alt="キャベツ" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="market-img-wrap" style="background:#d4edda">
+        <span class="veggie-emoji-sm">🥬</span>
+      </div>
       <div class="market-body">
         <div class="market-name">キャベツ<span class="badge badge-flat">→100%</span></div>
         <div class="market-stats">
@@ -257,7 +265,9 @@
       </div>
     </div>
     <div class="market-card">
-      <img class="market-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Komatsuna.jpg/400px-Komatsuna.jpg" alt="こまつな" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="market-img-wrap" style="background:#b2dfdb">
+        <span class="veggie-emoji-sm">🌿</span>
+      </div>
       <div class="market-body">
         <div class="market-name">こまつな<span class="badge badge-down">↓95%</span></div>
         <div class="market-stats">
@@ -267,7 +277,9 @@
       </div>
     </div>
     <div class="market-card">
-      <img class="market-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Spinach_leaves.jpg/400px-Spinach_leaves.jpg" alt="ほうれんそう" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="market-img-wrap" style="background:#b2dfdb">
+        <span class="veggie-emoji-sm">🌿</span>
+      </div>
       <div class="market-body">
         <div class="market-name">ほうれんそう<span class="badge badge-down">↓92%</span></div>
         <div class="market-stats">
@@ -280,7 +292,7 @@
 
 </div>
 <footer>
-  更新: 2026-04-24 02:38 JST &nbsp;|&nbsp;
+  更新: 2026-04-24 02:43 JST &nbsp;|&nbsp;
   データ: <a href="https://www.shijou.metro.tokyo.lg.jp/" target="_blank">東京都中央卸売市場</a>
 </footer>
 </body>

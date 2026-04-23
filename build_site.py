@@ -14,41 +14,28 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(BASE, "docs")
 os.makedirs(DOCS, exist_ok=True)
 
-# 野菜名 → Wikimedia Commons の安定した画像URL
-VEGGIE_PHOTOS = {
-    "キャベツ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cabbage_and_cross_section_on_white.jpg/400px-Cabbage_and_cross_section_on_white.jpg",
-    "だいこん":     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Daikon_Radish.jpg/400px-Daikon_Radish.jpg",
-    "はくさい":     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/fifty/Brassica_rapa_subsp_pekinensis.jpg/400px-Brassica_rapa_subsp_pekinensis.jpg",
-    "レタス":       "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Salad_garden.jpg/400px-Salad_garden.jpg",
-    "きゅうり":     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Cucumbers_-_whole_and_slice.jpg/400px-Cucumbers_-_whole_and_slice.jpg",
-    "トマト":       "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/400px-Tomato_je.jpg",
-    "ほうれんそう": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Spinach_leaves.jpg/400px-Spinach_leaves.jpg",
-    "ねぎ":         "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Allium_fistulosum_4.jpg/400px-Allium_fistulosum_4.jpg",
-    "たまねぎ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Onions.jpg/400px-Onions.jpg",
-    "にんじん":     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Vegetable-Carrot-Bundle-wStalks.jpg/400px-Vegetable-Carrot-Bundle-wStalks.jpg",
-    "じゃがいも":   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Potato_and_cross_section.jpg/400px-Potato_and_cross_section.jpg",
-    "さつまいも":   "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ipomoea_batatas_006.jpg/400px-Ipomoea_batatas_006.jpg",
-    "なす":         "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Eggplant_je.jpg/400px-Eggplant_je.jpg",
-    "ピーマン":     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Capsicum_annuum_-_Bell_peppers.jpg/400px-Capsicum_annuum_-_Bell_peppers.jpg",
-    "ブロッコリー": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Fresh_broccoli_DSC00862.jpg/400px-Fresh_broccoli_DSC00862.jpg",
-    "カリフラワー": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cauliflower_DSC03991_white_background.JPG/400px-Cauliflower_DSC03991_white_background.JPG",
-    "ごぼう":       "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Arctium_lappa_roots.jpg/400px-Arctium_lappa_roots.jpg",
-    "れんこん":     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Renkon.jpg/400px-Renkon.jpg",
-    "かぼちゃ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Cucurbita_pepo_Potimarron_p1040998.jpg/400px-Cucurbita_pepo_Potimarron_p1040998.jpg",
-    "アスパラガス": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/White-and-green-asparagus.jpg/400px-White-and-green-asparagus.jpg",
-    "えだまめ":     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Edamame.jpg/400px-Edamame.jpg",
-    "かぶ":         "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Turnip_2622027.jpg/400px-Turnip_2622027.jpg",
-    "こまつな":     "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Komatsuna.jpg/400px-Komatsuna.jpg",
-    "しょうが":     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Zingiber_officinale.jpg/400px-Zingiber_officinale.jpg",
-    "にんにく":     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Garlic_3.jpg/400px-Garlic_3.jpg",
-    "セロリ":       "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Celery_cross_section.jpg/400px-Celery_cross_section.jpg",
-    "チンゲンサイ": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Bok_choy_by_ayustety_in_Tokyo.jpg/400px-Bok_choy_by_ayustety_in_Tokyo.jpg",
-    "みずな":       "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Mizuna.jpg/400px-Mizuna.jpg",
+# 野菜名 → 絵文字＋背景色（外部画像依存なし）
+VEGGIE_EMOJI = {
+    "キャベツ": ("🥬", "#d4edda"), "だいこん": ("🫚", "#f0f0f0"),
+    "はくさい": ("🥬", "#e8f5e9"), "レタス": ("🥗", "#c8e6c9"),
+    "きゅうり": ("🥒", "#a5d6a7"), "トマト": ("🍅", "#ffcdd2"),
+    "ほうれんそう": ("🌿", "#b2dfdb"), "ねぎ": ("🧅", "#fff9c4"),
+    "たまねぎ": ("🧅", "#ffe0b2"), "にんじん": ("🥕", "#ffe0b2"),
+    "じゃがいも": ("🥔", "#f5f5dc"), "さつまいも": ("🍠", "#f8bbd0"),
+    "なす": ("🍆", "#e1bee7"), "ピーマン": ("🫑", "#c5e1a5"),
+    "ブロッコリー": ("🥦", "#aed581"), "カリフラワー": ("🥦", "#f5f5f5"),
+    "ごぼう": ("🌾", "#efebe9"), "れんこん": ("🪷", "#fce4ec"),
+    "かぼちゃ": ("🎃", "#ffe0b2"), "アスパラガス": ("🌱", "#dcedc8"),
+    "えだまめ": ("🫘", "#c8e6c9"), "かぶ": ("🫛", "#fce4ec"),
+    "こまつな": ("🌿", "#b2dfdb"), "しょうが": ("🫚", "#fff9c4"),
+    "にんにく": ("🧄", "#fffde7"), "セロリ": ("🌿", "#ccff90"),
+    "チンゲンサイ": ("🥬", "#e0f2f1"), "みずな": ("🌿", "#e8f5e9"),
 }
-FALLBACK_IMG = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg"
+FALLBACK_EMOJI = ("🥬", "#e8f5e9")
 
-def veggie_img(name):
-    return VEGGIE_PHOTOS.get(name, FALLBACK_IMG)
+def veggie_visual(name):
+    emoji, bg = VEGGIE_EMOJI.get(name, FALLBACK_EMOJI)
+    return emoji, bg
 
 
 # ── データ読込 ────────────────────────────────────────────────────────────────
@@ -131,14 +118,14 @@ def render_ranking(recipe_data, items):
         reason = r.get("reason", "")
         market = item_map.get(name, {})
         wow = wow_badge(market.get("前週比%", ""))
-        img = veggie_img(name)
+        emoji, bg = veggie_visual(name)
         m = medal.get(rank, f"#{rank}")
         retail = r.get("retail_price")
         price_html = f'<div class="retail-price">🏪 約{retail}円<span class="per100g">/100g</span></div>' if retail else ""
         cards += f"""
     <div class="rank-card">
-      <div class="rank-img-wrap">
-        <img class="rank-img" src="{img}" alt="{name}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="rank-img-wrap" style="background:{bg}">
+        <span class="veggie-emoji">{emoji}</span>
         <span class="rank-medal">{m}</span>
         {wow}
       </div>
@@ -160,11 +147,11 @@ def render_recipes(recipe_data):
     for recipe in recipe_data.get("recipes", []):
         ings = "".join(f"<span class='ing'>{i}</span>" for i in recipe.get("ingredients", []))
         steps = "".join(f"<li>{s}</li>" for s in recipe.get("steps", []))
-        img = veggie_img(recipe.get("item", ""))
+        emoji, bg = veggie_visual(recipe.get("item", ""))
         cards += f"""
     <div class="recipe-card">
-      <div class="recipe-img-wrap">
-        <img class="recipe-img" src="{img}" alt="{recipe['title']}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="recipe-img-wrap" style="background:{bg}">
+        <span class="veggie-emoji">{emoji}</span>
         <div class="recipe-time-badge">🕐 {recipe['time_min']}分</div>
       </div>
       <div class="recipe-body">
@@ -181,14 +168,12 @@ def render_recipes(recipe_data):
 def render_market_grid(items, recipe_data):
     if not items:
         return '<p class="no-data">市況データがありません。</p>'
-    # レシピで使用している野菜名を収集
     used = set()
     if recipe_data:
         for r in recipe_data.get("ranking", []):
             used.add(r.get("item", ""))
         for r in recipe_data.get("recipes", []):
             used.add(r.get("item", ""))
-    # 使用分だけ絞り込み（なければ全件）
     filtered = [r for r in items if r["品目"].strip() in used] if used else items
     cards = ""
     for r in filtered:
@@ -196,10 +181,12 @@ def render_market_grid(items, recipe_data):
         badge = wow_badge(wow)
         price = r.get("中値円", "") or "—"
         vol = r.get("入荷量t", "") or "—"
-        img = veggie_img(r["品目"])
+        emoji, bg = veggie_visual(r["品目"])
         cards += f"""
     <div class="market-card">
-      <img class="market-img" src="{img}" alt="{r['品目']}" loading="lazy" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Salad_Garden_at_Gardenology.jpg/400px-Salad_Garden_at_Gardenology.jpg'">
+      <div class="market-img-wrap" style="background:{bg}">
+        <span class="veggie-emoji-sm">{emoji}</span>
+      </div>
       <div class="market-body">
         <div class="market-name">{r['品目']}{badge}</div>
         <div class="market-stats">
@@ -251,8 +238,10 @@ HTML_TEMPLATE = """\
     .rank-card{{background:#fff;border-radius:16px;overflow:hidden;
                 box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .2s}}
     .rank-card:hover{{transform:translateY(-4px)}}
-    .rank-img-wrap{{position:relative}}
-    .rank-img{{width:100%;aspect-ratio:1;object-fit:cover}}
+    .rank-img-wrap{{position:relative;width:100%;aspect-ratio:1;
+                    display:flex;align-items:center;justify-content:center}}
+    .veggie-emoji{{font-size:4rem;line-height:1;user-select:none}}
+    .veggie-emoji-sm{{font-size:2.5rem;line-height:1;user-select:none}}
     .rank-medal{{position:absolute;top:8px;left:8px;font-size:1.6rem;
                  filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}}
     .rank-body{{padding:12px}}
@@ -276,8 +265,8 @@ HTML_TEMPLATE = """\
     .recipe-card{{background:#fff;border-radius:16px;overflow:hidden;
                   box-shadow:0 2px 12px rgba(0,0,0,.08);transition:transform .2s}}
     .recipe-card:hover{{transform:translateY(-4px)}}
-    .recipe-img-wrap{{position:relative}}
-    .recipe-img{{width:100%;height:180px;object-fit:cover}}
+    .recipe-img-wrap{{position:relative;width:100%;height:180px;
+                      display:flex;align-items:center;justify-content:center}}
     .recipe-time-badge{{position:absolute;bottom:10px;right:10px;
                         background:rgba(0,0,0,.55);color:#fff;border-radius:12px;
                         padding:4px 10px;font-size:.78rem;backdrop-filter:blur(4px)}}
@@ -297,7 +286,7 @@ HTML_TEMPLATE = """\
     .market-card{{background:#fff;border-radius:14px;overflow:hidden;
                   box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .2s}}
     .market-card:hover{{transform:translateY(-3px)}}
-    .market-img{{width:100%;aspect-ratio:1;object-fit:cover}}
+    .market-img-wrap{{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center}}
     .market-body{{padding:10px}}
     .market-name{{font-size:.85rem;font-weight:700;margin-bottom:6px;
                   display:flex;align-items:center;gap:4px;flex-wrap:wrap}}
