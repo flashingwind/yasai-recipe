@@ -375,7 +375,7 @@ def main():
 
     # 出力
     print("\n" + "=" * 60)
-    print(f"🍊 {week} おすすめ果実ランキング")
+    print(f"🥬 {week} おすすめ野菜ランキング")
     print("=" * 60)
     print(f"📢 市況: {result['market_comment']}\n")
     print("【おすすめランキング】")
