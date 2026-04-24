@@ -145,37 +145,39 @@ def wow_badge(wow_str):
     return f'<span class="badge badge-flat">→{v}%</span>'
 
 
-def items_in_comment(raw_comment):
-    """市況コメントに登場する品目名のリストを順番に返す（一段目→二段目以降の順）。"""
+def parse_item_comments(raw_comment):
+    """二段目以降の個別品目コメント行を {品目名: 文章} で返す。
+    例: 「だいこん」の1日平均入荷量は、前週比3%の減少となった。千葉県産の価格は保合となった。
+    """
     if not raw_comment:
-        return []
+        return {}
+    result = {}
     text = raw_comment.replace('\r', '').replace('\n', '')
-    return re.findall(r'「([^」]+)」', text)
+    for m in re.finditer(r'「([^」]+)」の1日平均入荷量[^。]*。[^「]*(?:の価格は[^。]*。)?', text):
+        name = m.group(1)
+        result[name] = plain_terms(m.group(0).replace(f'「{name}」', name, 1))
+    return result
+
+
+def first_para_names(raw_comment):
+    """一段目（全体概況）に登場する品目名のセットを返す。"""
+    if not raw_comment:
+        return set()
+    text = raw_comment.replace('\r', '').replace('\n', '')
+    boundary = re.search(r'「[^」]+」の1日平均入荷量', text)
+    first = text[:boundary.start()] if boundary else text
+    return set(re.findall(r'「([^」]+)」', first))
 
 
 def render_ranking(recipe_data, items):
     if not recipe_data:
         return '<p class="no-data">データを取得中...</p>'
     item_map = {r["品目"].strip(): r for r in items}
-    ranking = list(recipe_data.get("ranking", []))
+    ranking = recipe_data.get("ranking", [])
 
-    # 市況コメントに登場する品目を一段目→二段目以降の順で列挙
     raw_comment = items[0].get("コメント", "") if items else ""
-    comment_names = items_in_comment(raw_comment)
-
-    # ランキング品目がコメントに出ていない場合、コメント登場順で補填
-    ranked_names = {r["item"] for r in ranking}
-    extras = [
-        name for name in comment_names
-        if name not in ranked_names and name in item_map
-    ]
-    # 重複除去しつつ順序維持
-    seen = set()
-    extras = [n for n in extras if not (n in seen or seen.add(n))]
-
-    for i, r in enumerate(ranking):
-        if r["item"] not in comment_names and extras:
-            ranking[i] = dict(r, item=extras.pop(0))
+    in_first_para = first_para_names(raw_comment)
+    item_comments = parse_item_comments(raw_comment)
 
     cards = ""
     medal = {1: "🥇", 2: "🥈", 3: "🥉"}
@@ -189,7 +191,11 @@ def render_ranking(recipe_data, items):
         m = medal.get(rank, f"#{rank}")
         retail = r.get("retail_price")
         price_html = f'<div class="retail-price">🏪 約{retail}円<span class="per100g">/100g</span></div>' if retail else ""
-        comment = r.get("comment", "")
+        # 一段目に出ていない品目は二段目の個別コメントを補完、なければAIコメント
+        if name in in_first_para:
+            comment = r.get("comment", "")
+        else:
+            comment = item_comments.get(name) or r.get("comment", "")
         comment_html = f'<div class="card-comment">{comment}<span class="comment-src">Claude - 東京都中央卸売市場</span></div>' if comment else ""
         cards += f"""
     <div class="rank-card">
