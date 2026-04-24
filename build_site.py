@@ -247,7 +247,7 @@ HTML_TEMPLATE = """\
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>🥬 やさいのき — 今週のおすすめ野菜</title>
+  <title>🥬 やさいのき — きょうのおすすめ野菜</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
@@ -345,20 +345,20 @@ HTML_TEMPLATE = """\
 <body>
 <header>
   <div class="header-logo">🥬 やさいのき</div>
-  <div class="header-sub">東京中央卸売市場の市況から、今週買うべき野菜をお届け</div>
+  <div class="header-sub">東京中央卸売市場の市況から、きょう買うべき野菜をお届け</div>
   <div class="week-pill">{week}</div>
 </header>
 
 <div class="container">
 
   <div class="section">
-    <div class="section-title">🏆 今週のおすすめランキング</div>
+    <div class="section-title">🏆 きょうのオススメ野菜</div>
     {market_comment_html}
     {ranking_html}
   </div>
 
   <div class="section">
-    <div class="section-title">🍳 今週の簡単レシピ</div>
+    <div class="section-title">🍳 きょうの簡単レシピ</div>
     {recipes_html}
   </div>
 
