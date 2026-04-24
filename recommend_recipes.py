@@ -10,6 +10,9 @@ import json
 import os
 import re
 import sys
+from datetime import datetime
+
+import requests
 
 _env_path = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(_env_path):
@@ -136,26 +139,24 @@ def estimate_retail_price(name, prev_week_data):
 
 
 def calculate_score_with_retail(item, rules, max_values):
-    """推定小売価格があればそれを優先してスコア計算"""
+    """スコア計算。価格は日報補正済み価格 > 推定小売価格 > 週報中値の優先順で使用。"""
     try:
         vol = float(item["入荷量t"] or 0)
         wow = float(item["前週比%"] or 100)
         yoy = float(item["前年比%"] or 100)
         retail = item.get("推定小売円_100g")
+        corrected = item.get("補正価格円")  # 日報数量から補正した卸値
     except (ValueError, KeyError):
         return 0
 
-    # 豊富さ
     richness = (vol / max_values["vol"]) * 100 if max_values["vol"] > 0 else 0
-
-    # トレンド
     trend = max(min((wow - 50) / 150 * 100, 100), 0)
-
-    # 旬度
     seasonality = 100 - min(abs(yoy - 100) * 0.8, 100)
 
-    # 手頃さ：推定小売価格があれば優先
-    if retail and max_values.get("retail_price", 0) > 0:
+    # 手頃さ: 日報補正価格 > 推定小売価格 > 週報中値
+    if corrected and max_values.get("corrected_price", 0) > 0:
+        affordability = (1 - corrected / max_values["corrected_price"]) * 100
+    elif retail and max_values.get("retail_price", 0) > 0:
         affordability = (1 - retail / max_values["retail_price"]) * 100
     else:
         price = float(item["中値円"] or max_values["price"])
@@ -174,15 +175,91 @@ def calc_max_values(items):
     """各カテゴリの最大値を計算"""
     max_vol = 1
     max_price = 1
+    max_corrected = 0
     for r in items:
         try:
             vol = float(r["入荷量t"] or 0)
             price = float(r["中値円"] or 0)
             max_vol = max(max_vol, vol)
             max_price = max(max_price, price)
+            if r.get("補正価格円"):
+                max_corrected = max(max_corrected, r["補正価格円"])
         except (ValueError, TypeError):
             pass
-    return {"vol": max_vol, "price": max_price}
+    result = {"vol": max_vol, "price": max_price}
+    if max_corrected > 0:
+        result["corrected_price"] = max_corrected
+    return result
+
+
+# ── 日報取得・価格補正 ────────────────────────────────────────────────────────
+
+PRICE_ELASTICITY = 0.3  # 数量1%増 → 価格0.3%下落と仮定
+
+def fetch_daily_volumes(date=None):
+    """市場日報CSVから当日の野菜卸売数量を {品目名: kg} で返す。取得失敗時は {}。"""
+    if date is None:
+        date = datetime.now()
+    ym = date.strftime("%Y%m")
+    ymd = date.strftime("%Y%m%d")
+    url = f"https://www.shijou-nippo.metro.tokyo.lg.jp/SN/{ym}/{ymd}/Sei/Sei_K0.csv"
+    try:
+        r = requests.get(url, timeout=15)
+        r.encoding = r.apparent_encoding
+    except Exception as e:
+        print(f"⚠ 日報取得失敗: {e}")
+        return {}
+
+    result = {}
+    in_veggie = False
+    for line in r.text.splitlines():
+        if "野菜（単位" in line:
+            in_veggie = True
+            continue
+        if "果実（単位" in line or "花き（単位" in line:
+            break
+        if not in_veggie:
+            continue
+        parts = line.split(",")
+        name = parts[0].strip()
+        if not name or name == "品名":
+            continue
+        try:
+            vol_kg = float(parts[1].replace("－", "0").replace(",", "") or 0)
+            if vol_kg > 0:
+                result[name] = vol_kg
+        except (IndexError, ValueError):
+            pass
+    return result
+
+
+def apply_daily_price_correction(items, daily_vols):
+    """週報の品目リストに日報の数量増減から推定価格補正を付与する。
+
+    weekly_daily_vol = 週報入荷量(t) * 1000 / 7  （週平均の1日量）
+    volume_ratio     = daily_vol / weekly_daily_vol
+    price_factor     = volume_ratio ^ (-PRICE_ELASTICITY)
+    補正後価格       = 週報中値 * price_factor
+    """
+    for item in items:
+        name = item["品目"].strip()
+        daily_kg = daily_vols.get(name)
+        if daily_kg is None:
+            continue
+        try:
+            weekly_t = float(item["入荷量t"] or 0)
+            base_price = float(item["中値円"] or 0)
+        except (ValueError, TypeError):
+            continue
+        if weekly_t <= 0 or base_price <= 0:
+            continue
+        weekly_daily_kg = weekly_t * 1000 / 7
+        volume_ratio = daily_kg / weekly_daily_kg
+        price_factor = volume_ratio ** (-PRICE_ELASTICITY)
+        item["補正価格円"] = base_price * price_factor
+        item["日報数量kg"] = daily_kg
+        item["日量比"] = round(volume_ratio, 3)
+    return items
 
 
 # ── プロンプト ──────────────────────────────────────────────────────────────
@@ -303,75 +380,83 @@ def main():
     sorted_weeks = sorted(all_weeks.keys(), reverse=True)
     prev_week_data = all_weeks[sorted_weeks[1]] if len(sorted_weeks) >= 2 else {}
 
-    # キャッシュを確認
+    # 各品目に推定小売価格を付与
+    for item in items:
+        name = item["品目"].strip()
+        retail = estimate_retail_price(name, prev_week_data)
+        item["推定小売円_100g"] = retail
+
+    # 日報から当日数量を取得し、週報との比較で価格を補正（毎日実行）
+    print("日報データ取得中...")
+    daily_vols = fetch_daily_volumes()
+    if daily_vols:
+        print(f"  日報品目数: {len(daily_vols)}")
+        apply_daily_price_correction(items, daily_vols)
+    else:
+        print("  日報データなし（週報のみでスコア計算）")
+
+    max_values = calc_max_values(items)
+    retail_prices = [i["推定小売円_100g"] for i in items if i.get("推定小売円_100g")]
+    if retail_prices:
+        max_values["retail_price"] = max(retail_prices)
+
+    # ランキングは毎日再計算（日報補正が日ごとに変わるため）
+    print("ランキング計算中...")
+    scores = []
+    for item in items:
+        score = calculate_score_with_retail(item, rules, max_values)
+        scores.append((item["品目"], score, item))
+    scores.sort(key=lambda x: x[1], reverse=True)
+
+    ranking = []
+    for i, (name, score, r) in enumerate(scores[:5]):
+        retail = r.get("推定小売円_100g")
+        retail_str = f"約{retail}円/100g" if retail else "価格調査中"
+        ratio = r.get("日量比")
+        ratio_str = f"、本日入荷量 週平均比{ratio:.0%}" if ratio else ""
+        ranking.append({
+            "rank": i + 1,
+            "item": name,
+            "score": score,
+            "retail_price": retail,
+            "reason": f"スーパー目安 {retail_str}、入荷量{r['入荷量t']}t{ratio_str}"
+        })
+
+    # コメント・レシピはキャッシュから（週単位）、なければAPI生成
     cached = load_cache(week)
     if cached:
-        print("✓ キャッシュから読み込みました（API呼び出しなし）")
-        result = {
-            "week": week,
-            "ranking": cached.get("ranking", []),
-            "market_comment": cached.get("market_comment", ""),
-            "recipes": cached.get("recipes", [])
-        }
+        print("✓ コメント・レシピをキャッシュから読み込みました（API呼び出しなし）")
+        ranking_comments = cached.get("ranking_comments", {})
+        market_comment_text = cached.get("market_comment", "")
+        recipes = cached.get("recipes", [])
     else:
-        # 各品目に推定小売価格を付与
-        for item in items:
-            name = item["品目"].strip()
-            retail = estimate_retail_price(name, prev_week_data)
-            item["推定小売円_100g"] = retail
-
-        # 推定価格ベースで max_price を再計算
-        max_values = calc_max_values(items)
-        # 推定価格がある品目はそれを価格スコアに使用
-        retail_prices = [i["推定小売円_100g"] for i in items if i.get("推定小売円_100g")]
-        if retail_prices:
-            max_values["retail_price"] = max(retail_prices)
-
-        print("計算中...")
-        scores = []
-        for item in items:
-            score = calculate_score_with_retail(item, rules, max_values)
-            scores.append((item["品目"], score, item))
-
-        scores.sort(key=lambda x: x[1], reverse=True)
-        ranking = []
-        for i, (name, score, r) in enumerate(scores[:5]):
-            retail = r.get("推定小売円_100g")
-            retail_str = f"約{retail}円/100g" if retail else "価格調査中"
-            ranking.append({
-                "rank": i + 1,
-                "item": name,
-                "score": score,
-                "retail_price": retail,
-                "reason": f"スーパー目安 {retail_str}、入荷量{r['入荷量t']}t"
-            })
-
-        # Claude API でレシピ・コメント生成
         print("レシピ・コメント生成中...")
         top_items = [
             (name, score, f"約{r.get('推定小売円_100g')}円/100g" if r.get('推定小売円_100g') else "")
             for name, score, r in scores[:3]
         ]
-        items_str_with_price = "\n".join(
-            f"- {name}: {score}点（{price}）" for name, score, price in top_items
-        )
         market_comment = build_comment(items)
         recipe_data = generate_recipe_and_comment("", top_items, market_comment)
-
         ranking_comments = recipe_data.get("ranking_comments", {})
-        for entry in ranking:
-            entry["comment"] = ranking_comments.get(entry["item"], "")
-
-        result = {
+        market_comment_text = recipe_data.get("market_comment", "")
+        recipes = recipe_data.get("recipes", [])
+        save_cache(week, {
             "week": week,
-            "ranking": ranking,
-            "market_comment": recipe_data.get("market_comment", ""),
-            "recipes": recipe_data.get("recipes", [])
-        }
-
-        # キャッシュに保存
-        save_cache(week, result)
+            "ranking_comments": ranking_comments,
+            "market_comment": market_comment_text,
+            "recipes": recipes,
+        })
         print("✓ キャッシュに保存しました。")
+
+    for entry in ranking:
+        entry["comment"] = ranking_comments.get(entry["item"], "")
+
+    result = {
+        "week": week,
+        "ranking": ranking,
+        "market_comment": market_comment_text,
+        "recipes": recipes,
+    }
 
     # 出力
     print("\n" + "=" * 60)
