@@ -31,6 +31,8 @@
     .comment-box{background:linear-gradient(135deg,#e9f5ee,#f0faf4);
                   border-left:4px solid #52b788;border-radius:0 12px 12px 0;
                   padding:14px 18px;font-size:.9rem;color:#444;margin-bottom:20px;line-height:1.7}
+    .comment-raw{color:#555;margin-bottom:8px}
+    .comment-ai{color:#2d6a4f;font-weight:700}
 
     /* ランキング */
     .rank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}
@@ -109,8 +111,8 @@
 
   <div class="section">
     <div class="section-title">🏆 きょうのオススメ野菜</div>
-    <div class="comment-box">今週は全体の入荷量が前週比3%増と安定していますが、キャベツは神奈川県産が強保合で価格やや高め。一方、ほうれんそうやかぶは入荷減ながらお手頃価格で、春の葉物・根菜が旬の食卓にぴったりです。</div>
-    <div class="rank-grid">
+    <div class="comment-box"><p class="comment-raw">今週の1日の平均入荷量は5,088トン。前週比では「たけのこ」「ふき」「にんじん」等が増加。「なす」「かぶ」「ほうれんそう」等が減少。全体では3%の増加となった。前年同期比では「たけのこ」「にんじん」「ミニトマト」等が増加。「そらまめ」「ごぼう」「さつまいも」等が減少。全体では増減なしとなった。市況は前週比で保合、前年同期比で弱保合となった。</p><p class="comment-ai">今週は全体の入荷量が前週比3%増と安定していますが、キャベツは神奈川県産が強保合で価格やや高め。一方、ほうれんそうやかぶは入荷減ながらお手頃価格で、春の葉物・根菜が旬の食卓にぴったりです。</p></div>
+    <div class="rank-grid" style="grid-template-columns:repeat(5,1fr)">
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:#d4edda">
         <img class="veggie-emoji" src="img/cabbage.svg" alt="キャベツ" onerror="this.src='img/fallback.png'">
@@ -230,7 +232,7 @@
 
 </div>
 <footer>
-  更新: 2026-04-24 22:09 JST &nbsp;|&nbsp;
+  更新: 2026-04-24 22:15 JST &nbsp;|&nbsp;
   データ: <a href="https://www.shijou.metro.tokyo.lg.jp/" target="_blank">東京都中央卸売市場</a>
 </footer>
 </body>

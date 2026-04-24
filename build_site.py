@@ -149,13 +149,25 @@ def render_ranking(recipe_data, items):
     if not recipe_data:
         return '<p class="no-data">データを取得中...</p>'
     item_map = {r["品目"].strip(): r for r in items}
+    ranking = list(recipe_data.get("ranking", []))
+
+    # ランキング品目に画像なしのものがあれば、CSVの残り品目（下部）から画像ありで差し替え
+    ranked_names = {r["item"] for r in ranking}
+    extras = [
+        r["品目"].strip() for r in items
+        if r["品目"].strip() not in ranked_names
+        and r["品目"].strip() in VEGGIE_IMG
+    ]
+    for i, r in enumerate(ranking):
+        if r["item"] not in VEGGIE_IMG and extras:
+            ranking[i] = dict(r, item=extras.pop(0))
+
     cards = ""
     medal = {1: "🥇", 2: "🥈", 3: "🥉"}
-    for r in recipe_data.get("ranking", []):
+    for r in ranking:
         name = r["item"]
         rank = r["rank"]
         score = r["score"]
-        reason = r.get("reason", "")
         market = item_map.get(name, {})
         wow = wow_badge(market.get("前週比%", ""))
         emoji, bg = veggie_visual(name)
@@ -179,7 +191,8 @@ def render_ranking(recipe_data, items):
         <div class="rank-score-label">{score}点</div>
       </div>
     </div>"""
-    return f'<div class="rank-grid">{cards}</div>'
+    n = len(ranking)
+    return f'<div class="rank-grid" style="grid-template-columns:repeat({n},1fr)">{cards}</div>'
 
 
 def render_recipes(recipe_data):
@@ -275,6 +288,8 @@ HTML_TEMPLATE = """\
     .comment-box{{background:linear-gradient(135deg,#e9f5ee,#f0faf4);
                   border-left:4px solid #52b788;border-radius:0 12px 12px 0;
                   padding:14px 18px;font-size:.9rem;color:#444;margin-bottom:20px;line-height:1.7}}
+    .comment-raw{{color:#555;margin-bottom:8px}}
+    .comment-ai{{color:#2d6a4f;font-weight:700}}
 
     /* ランキング */
     .rank-grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px}}
@@ -373,13 +388,34 @@ HTML_TEMPLATE = """\
 """
 
 
+def extract_first_paragraph(raw_comment):
+    """市況コメントの第一段落（全体概況）を返す。
+    各品目の個別コメント（「だいこん」の〜）が始まる前までを全体概況とする。"""
+    if not raw_comment:
+        return ""
+    text = raw_comment.replace('\r', '').replace('\n', '')
+    # 最初の品目個別行（「○○」の1日平均入荷量〜）が出る前まで
+    m = re.search(r'「[^」]+」の1日平均入荷量', text)
+    if m:
+        return text[:m.start()].strip()
+    return text.strip()
+
+
 def build():
     items, week = load_market_data()
     recipe_data = load_recipe_cache(week) if week else None
 
-    market_comment_html = ""
-    if recipe_data and recipe_data.get("market_comment"):
-        market_comment_html = f'<div class="comment-box">{recipe_data["market_comment"]}</div>'
+    # 市況コメント: CSV一段目 + AIコメント
+    raw_comment = items[0].get("コメント", "") if items else ""
+    first_para = extract_first_paragraph(raw_comment)
+    ai_comment = recipe_data.get("market_comment", "") if recipe_data else ""
+
+    comment_parts = []
+    if first_para:
+        comment_parts.append(f'<p class="comment-raw">{first_para}</p>')
+    if ai_comment:
+        comment_parts.append(f'<p class="comment-ai">{ai_comment}</p>')
+    market_comment_html = f'<div class="comment-box">{"".join(comment_parts)}</div>' if comment_parts else ""
 
     html = HTML_TEMPLATE.format(
         week=week or "データなし",
