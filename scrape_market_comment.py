@@ -42,8 +42,8 @@ def get_weekly_links(base_url):
     res = requests.get(base_url, timeout=30)
     res.encoding = res.apparent_encoding
     soup = BeautifulSoup(res.text, 'html.parser')
-    links = []
     seen = set()
+    links = []
     for a in soup.find_all('a', href=True):
         href = a['href']
         if re.search(r'/documents/d/shijou/', href):
@@ -52,6 +52,8 @@ def get_weekly_links(base_url):
             if href not in seen:
                 seen.add(href)
                 links.append(href)
+    # URLに埋め込まれた日付で降順ソートして最新を先頭に
+    links.sort(key=lambda x: re.search(r'(\d{4}-\d{2}-\d{2})', x).group(1) if re.search(r'(\d{4}-\d{2}-\d{2})', x) else '', reverse=True)
     return links
 
 
