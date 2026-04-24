@@ -145,21 +145,36 @@ def wow_badge(wow_str):
     return f'<span class="badge badge-flat">→{v}%</span>'
 
 
+def items_in_comment(raw_comment):
+    """市況コメントに登場する品目名のリストを順番に返す（一段目→二段目以降の順）。"""
+    if not raw_comment:
+        return []
+    text = raw_comment.replace('\r', '').replace('\n', '')
+    return re.findall(r'「([^」]+)」', text)
+
+
 def render_ranking(recipe_data, items):
     if not recipe_data:
         return '<p class="no-data">データを取得中...</p>'
     item_map = {r["品目"].strip(): r for r in items}
     ranking = list(recipe_data.get("ranking", []))
 
-    # ランキング品目に画像なしのものがあれば、CSVの残り品目（下部）から画像ありで差し替え
+    # 市況コメントに登場する品目を一段目→二段目以降の順で列挙
+    raw_comment = items[0].get("コメント", "") if items else ""
+    comment_names = items_in_comment(raw_comment)
+
+    # ランキング品目がコメントに出ていない場合、コメント登場順で補填
     ranked_names = {r["item"] for r in ranking}
     extras = [
-        r["品目"].strip() for r in items
-        if r["品目"].strip() not in ranked_names
-        and r["品目"].strip() in VEGGIE_IMG
+        name for name in comment_names
+        if name not in ranked_names and name in item_map
     ]
+    # 重複除去しつつ順序維持
+    seen = set()
+    extras = [n for n in extras if not (n in seen or seen.add(n))]
+
     for i, r in enumerate(ranking):
-        if r["item"] not in VEGGIE_IMG and extras:
+        if r["item"] not in comment_names and extras:
             ranking[i] = dict(r, item=extras.pop(0))
 
     cards = ""
@@ -388,6 +403,31 @@ HTML_TEMPLATE = """\
 """
 
 
+MARKET_TERMS = [
+    (r'前週比で?強含み',   '先週より値上がり傾向'),
+    (r'前週比で?弱含み',   '先週より値下がり傾向'),
+    (r'前週比で?強保合',   '先週より少し高め'),
+    (r'前週比で?弱保合',   '先週より少し安め'),
+    (r'前週比で?保合',     '先週並みの値段'),
+    (r'前年同期比で?強含み', '去年より値上がり傾向'),
+    (r'前年同期比で?弱含み', '去年より値下がり傾向'),
+    (r'前年同期比で?強保合', '去年より少し高め'),
+    (r'前年同期比で?弱保合', '去年より少し安め'),
+    (r'前年同期比で?保合',   '去年並みの値段'),
+    (r'強含み', '値上がり傾向'),
+    (r'弱含み', '値下がり傾向'),
+    (r'強保合', '少し高め'),
+    (r'弱保合', '少し安め'),
+    (r'保合',   '値段は安定'),
+]
+
+def plain_terms(text):
+    """市場専門用語をわかりやすい言葉に置換する。"""
+    for pattern, replacement in MARKET_TERMS:
+        text = re.sub(pattern, replacement, text)
+    return text
+
+
 def extract_first_paragraph(raw_comment):
     """市況コメントの第一段落（全体概況）を返す。
     各品目の個別コメント（「だいこん」の〜）が始まる前までを全体概況とする。"""
@@ -412,9 +452,9 @@ def build():
 
     comment_parts = []
     if first_para:
-        comment_parts.append(f'<p class="comment-raw">{first_para}</p>')
+        comment_parts.append(f'<p class="comment-raw">{plain_terms(first_para)}</p>')
     if ai_comment:
-        comment_parts.append(f'<p class="comment-ai">{ai_comment}</p>')
+        comment_parts.append(f'<p class="comment-ai">{plain_terms(ai_comment)}</p>')
     market_comment_html = f'<div class="comment-box">{"".join(comment_parts)}</div>' if comment_parts else ""
 
     html = HTML_TEMPLATE.format(
