@@ -309,7 +309,9 @@ HTML_TEMPLATE = """\
     .comment-box{{background:linear-gradient(135deg,#e9f5ee,#f0faf4);
                   border-left:4px solid #52b788;border-radius:0 12px 12px 0;
                   padding:14px 18px;font-size:.9rem;color:#444;margin-bottom:20px;line-height:1.7}}
-    .comment-week{{font-size:.75rem;color:#888;margin-bottom:6px}}
+    .comment-week{{font-size:1.2rem;font-weight:900;color:#2d6a4f;
+                   margin-bottom:16px;display:flex;align-items:center;gap:8px}}
+    .comment-week::after{{content:'';flex:1;height:2px;background:linear-gradient(to right,#52b788,transparent)}}
     .comment-raw{{color:#555;margin-bottom:8px}}
     .comment-ai{{color:#2d6a4f;font-weight:700}}
 
@@ -389,8 +391,8 @@ HTML_TEMPLATE = """\
 <div class="container">
 
   <div class="section">
-    <div class="section-title">🏆 {today} のオススメ野菜</div>
     {market_comment_html}
+    <div class="section-title">🏆 {today} のオススメ野菜</div>
     {ranking_html}
   </div>
 
