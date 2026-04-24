@@ -309,6 +309,7 @@ HTML_TEMPLATE = """\
     .comment-box{{background:linear-gradient(135deg,#e9f5ee,#f0faf4);
                   border-left:4px solid #52b788;border-radius:0 12px 12px 0;
                   padding:14px 18px;font-size:.9rem;color:#444;margin-bottom:20px;line-height:1.7}}
+    .comment-week{{font-size:.75rem;color:#888;margin-bottom:6px}}
     .comment-raw{{color:#555;margin-bottom:8px}}
     .comment-ai{{color:#2d6a4f;font-weight:700}}
 
@@ -388,13 +389,13 @@ HTML_TEMPLATE = """\
 <div class="container">
 
   <div class="section">
-    <div class="section-title">🏆 きょうのオススメ野菜</div>
+    <div class="section-title">🏆 {today} のオススメ野菜</div>
     {market_comment_html}
     {ranking_html}
   </div>
 
   <div class="section">
-    <div class="section-title">🍳 きょうの簡単レシピ</div>
+    <div class="section-title">🍳 {today} の簡単レシピ</div>
     {recipes_html}
   </div>
 
@@ -456,19 +457,21 @@ def build():
     first_para = extract_first_paragraph(raw_comment)
     ai_comment = recipe_data.get("market_comment", "") if recipe_data else ""
 
-    comment_parts = []
+    comment_parts = [f'<p class="comment-week">📅 {week} の市況</p>'] if week else []
     if first_para:
         comment_parts.append(f'<p class="comment-raw">{plain_terms(first_para)}</p>')
     if ai_comment:
         comment_parts.append(f'<p class="comment-ai">{plain_terms(ai_comment)}</p>')
     market_comment_html = f'<div class="comment-box">{"".join(comment_parts)}</div>' if comment_parts else ""
 
+    now = datetime.now()
     html = HTML_TEMPLATE.format(
         week=week or "データなし",
+        today=now.strftime("%-m月%-d日"),
         market_comment_html=market_comment_html,
         ranking_html=render_ranking(recipe_data, items),
         recipes_html=render_recipes(recipe_data),
-        updated_at=datetime.now().strftime("%Y-%m-%d %H:%M JST"),
+        updated_at=now.strftime("%Y-%m-%d %H:%M JST"),
     )
 
     out = os.path.join(DOCS, "index.html")
