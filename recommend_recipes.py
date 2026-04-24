@@ -394,6 +394,13 @@ def main():
         "recipes": recipes,
     }
 
+    # 日次ランキング結果をファイルに書き出す（build_site.py が読む）
+    today_str = datetime.now().strftime("%Y%m%d")
+    result_path = f"daily_result_{today_str}.json"
+    with open(result_path, "w", encoding="utf-8") as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+    print(f"✓ 日次結果出力: {result_path}")
+
     # 出力
     print("\n" + "=" * 60)
     print(f"🥬 {week} おすすめ野菜ランキング")

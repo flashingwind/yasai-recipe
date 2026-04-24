@@ -100,26 +100,24 @@ def load_market_data():
 
 
 def load_recipe_cache(week):
-    # recommend_recipes.py と同じキー生成ロジック
+    # 今日の日次結果ファイルを最優先
+    today_str = datetime.now().strftime("%Y%m%d")
+    daily_path = os.path.join(BASE, f"daily_result_{today_str}.json")
+    if os.path.exists(daily_path):
+        with open(daily_path, encoding="utf-8") as f:
+            return json.load(f)
+    # フォールバック: 週次キャッシュ
     safe = re.sub(r"[^\w]", "_", week)
-    candidates = [
-        os.path.join(BASE, f".cache/recipe_{week}.json"),   # 日本語そのまま
-        os.path.join(BASE, f".cache/recipe_{safe}.json"),   # 記号→_
-    ]
-    for path in candidates:
+    for path in [
+        os.path.join(BASE, f".cache/recipe_{week}.json"),
+        os.path.join(BASE, f".cache/recipe_{safe}.json"),
+    ]:
         if not os.path.exists(path):
             continue
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
-        if isinstance(data, dict) and "ranking" in data:
+        if isinstance(data, dict) and ("ranking" in data or "recipes" in data):
             return data
-        text = data.get("text", "")
-        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
-        json_str = m.group(1) if m else text.strip()
-        try:
-            return json.loads(json_str)
-        except json.JSONDecodeError:
-            return None
     return None
 
 
