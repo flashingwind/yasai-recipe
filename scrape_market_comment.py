@@ -251,37 +251,40 @@ def extract_data(url):
 if __name__ == "__main__":
     base_url = "https://www.shijou.metro.tokyo.lg.jp/torihiki/week/yasai"
     week_links = get_weekly_links(base_url)
-    print(f"週リンク数: {len(week_links)}")
-    all_rows = []
-    total = len(week_links)
-    for idx, link in enumerate(week_links, 1):
-        print(f"[{idx}/{total}] {link}", flush=True)
-        data = extract_data(link)
-        comment = data.get("comment", "")
-        items = data.get("items", [])
-        if not items:
-            print(f"  -> 品目なし (コメント: {comment[:40]})")
-        for item in items:
-            row = {
-                "週": item.get("week", ""),
-                "品目": item.get("name", ""),
-                "入荷量t": item.get("volume_t", ""),
-                "前週比%": item.get("prev_week_pct", ""),
-                "前年比%": item.get("prev_year_pct", ""),
-                "高値円": item.get("price_high", ""),
-                "中値円": item.get("price_mid", ""),
-                "安値円": item.get("price_low", ""),
-                "コメント": comment,
-                "URL": link,
-            }
-            all_rows.append(row)
+    if not week_links:
+        print("リンクが見つかりませんでした。")
+        raise SystemExit(1)
 
-    dt = datetime.now().strftime("%Y%m%d_%H%M%S")
-    outname = f"market_data_{dt}.csv"
+    # 最新週のみ取得（過去データはキャッシュに残る）
+    link = week_links[0]
+    print(f"最新週: {link}")
+    data = extract_data(link)
+    comment = data.get("comment", "")
+    items = data.get("items", [])
+    print(f"品目数: {len(items)}")
+    if not items:
+        print(f"品目なし (コメント: {comment[:60]})")
+        raise SystemExit(1)
+
+    rows = []
+    for item in items:
+        rows.append({
+            "週": item.get("week", ""),
+            "品目": item.get("name", ""),
+            "入荷量t": item.get("volume_t", ""),
+            "前週比%": item.get("prev_week_pct", ""),
+            "前年比%": item.get("prev_year_pct", ""),
+            "高値円": item.get("price_high", ""),
+            "中値円": item.get("price_mid", ""),
+            "安値円": item.get("price_low", ""),
+            "コメント": comment,
+            "URL": link,
+        })
+
+    outname = "market_data.csv"
     fieldnames = ["週", "品目", "入荷量t", "前週比%", "前年比%", "高値円", "中値円", "安値円", "コメント", "URL"]
     with open(outname, "w", newline='', encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        for row in all_rows:
-            writer.writerow(row)
-    print(f"\nCSV出力完了: {outname} ({len(all_rows)}行)")
+        writer.writerows(rows)
+    print(f"CSV出力完了: {outname} ({len(rows)}行)")
