@@ -1,35 +1,35 @@
 {
-  "description": "消費者向け野菜おすすめ度スコア（0〜100点）。供給の豊富さ・トレンド・旬度・価格の手頃さを統計的に正規化し、加重平均で算出する。各因子は全品目の最大値で正規化（Min-Max法の簡易版）し、価格は逆数化することで『安いほど高スコア』とする。重みは消費者の購買意思決定における優先順位（家計優先＞旬＞入手しやすさ＞トレンド）を反映。",
+  "description": "消費者視点で『手に入れやすく、トレンドに乗っており、旬で、家計に優しい』野菜を評価するための統計的ランキングルール。各因子を0〜1に正規化（min-max正規化）した上で重み付け線形結合し、最終的に0〜100点にスケーリングする。価格は逆方向（安いほど高得点）に変換する。",
   "factors": [
     {
-      "name": "豊富さスコア（Abundance）",
+      "name": "豊富さ（Abundance）",
       "source": "入荷量（t）",
-      "weight": 0.25,
-      "formula": "(volume / max_volume) * 100",
-      "notes": "入荷量が多いほど店頭に並びやすく、消費者が選びやすい。全品目中の最大入荷量で正規化することで0〜100に収める。"
+      "weight": 0.3,
+      "formula": "abundance_score = volume / max_volume",
+      "notes": "入荷量が多いほど店頭で見つけやすく、品質の良いものを選びやすい。全品目中の最大入荷量で正規化することで0〜1に収める。"
     },
     {
-      "name": "トレンドスコア（Trend）",
+      "name": "トレンド（Trend）",
       "source": "前週比（%）",
       "weight": 0.15,
-      "formula": "min(max(week_ratio, 50), 150) を 0〜100 に線形変換 = (clamped_week_ratio - 50)",
-      "notes": "前週比50%を下限、150%を上限としてクリッピングし、急増・急減の外れ値を抑制。100%（横ばい）が50点、150%以上で満点。"
+      "formula": "trend_score = min(max((wow - 50) / 100, 0), 1)",
+      "notes": "前週比50%を基準点、150%を上限としてクリップ。供給増加は注目度・人気の代理指標。極端な急増（投機的）は1.0で頭打ちにして影響を抑える。"
     },
     {
-      "name": "旬度スコア（Seasonality）",
+      "name": "旬度（Seasonality）",
       "source": "前年比（%）",
       "weight": 0.25,
-      "formula": "100 - min(|year_ratio - 100|, 100)",
-      "notes": "前年比が100%に近いほど『例年通りの旬』として高評価。極端な増減は不作・不自然な供給と判断し減点。"
+      "formula": "seasonality_score = 1 - min(|yoy - 100| / 100, 1)",
+      "notes": "前年同期比100%に近いほど『例年通りの旬』として高評価。乖離が大きいほど不作・異常で減点。100%中心の三角分布的スコアリング。"
     },
     {
-      "name": "手頃さスコア（Affordability）",
+      "name": "手頃さ（Affordability）",
       "source": "価格（円）",
-      "weight": 0.35,
-      "formula": "(1 - price / max_price) * 100",
-      "notes": "全品目中の最高価格を基準に逆数化。最安値に近いほど100点に近づく。消費者の家計感度が最も高いため最大の重みを付与。"
+      "weight": 0.3,
+      "formula": "affordability_score = (max_price - price) / (max_price - min_price)",
+      "notes": "価格は逆方向に正規化（安いほど1.0、高いほど0.0）。家計負担への影響が大きいため重みは豊富さと同等に設定。"
     }
   ],
-  "final_score_formula": "Score = 0.25 * Abundance + 0.15 * Trend + 0.25 * Seasonality + 0.35 * Affordability  （理論上の範囲: 0〜100点、小数第1位で四捨五入）",
-  "example": "例：キャベツ（入荷量120t / max 200t、前週比115%、前年比98%、価格150円 / max 500円）\n- Abundance = (120/200)*100 = 60.0 → ×0.25 = 15.0\n- Trend = 115 - 50 = 65.0 → ×0.15 = 9.75\n- Seasonality = 100 - |98-100| = 98.0 → ×0.25 = 24.5\n- Affordability = (1 - 150/500)*100 = 70.0 → ×0.35 = 24.5\n- 最終スコア = 15.0 + 9.75 + 24.5 + 24.5 = 73.75 → 約74点（おすすめ度：高）"
+  "final_score_formula": "final_score = (0.30 × abundance_score + 0.15 × trend_score + 0.25 × seasonality_score + 0.30 × affordability_score) × 100",
+  "example": "例：キャベツ（入荷量800t、前週比120%、前年比105%、価格150円）、全品目中 max_volume=1000t, max_price=500円, min_price=100円の場合\n・abundance_score = 800 / 1000 = 0.80\n・trend_score = (120 - 50) / 100 = 0.70\n・seasonality_score = 1 - |105 - 100| / 100 = 0.95\n・affordability_score = (500 - 150) / (500 - 100) = 0.875\n・final_score = (0.30×0.80 + 0.15×0.70 + 0.25×0.95 + 0.30×0.875) × 100\n            = (0.24 + 0.105 + 0.2375 + 0.2625) × 100\n            = 84.5点\n→ 『豊富で、トレンドに乗り、旬で、手頃』なおすすめ野菜と評価される。"
 }
