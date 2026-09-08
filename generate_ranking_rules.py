@@ -59,7 +59,7 @@ user_message = """現在の市況データに基づいて、消費者にとっ�
 print("Claude API でランキングルールを生成中...\n")
 
 response = client.messages.create(
-    model="claude-opus-4-7",
+    model="claude-3-5-sonnet-20241022",
     max_tokens=1500,
     system=system_prompt,
     messages=[
