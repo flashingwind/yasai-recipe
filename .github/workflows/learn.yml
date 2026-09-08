@@ -29,6 +29,7 @@ jobs:
       - name: ランキングルール学習
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        continue-on-error: true
         run: python generate_ranking_rules.py > /tmp/rules_output.txt 2>&1; cat /tmp/rules_output.txt
 
       - name: ルール更新をコミット
