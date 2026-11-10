@@ -2,7 +2,7 @@
 """
 市況データをもとにランキングとレシピを生成する。
 - ランキング: 統計ルール（ranking_rules.json）で計算（API呼び出しなし）
-- コメント・レシピ: Claude API で生成（週ごとキャッシュ）
+- コメント・レシピ: OpenAI API (GPT) で生成（週ごとキャッシュ）
 """
 import csv
 import glob
@@ -23,7 +23,8 @@ if os.path.exists(_env_path):
                 _k, _v = _line.split("=", 1)
                 os.environ.setdefault(_k.strip(), _v.strip().strip('"').strip("'"))
 
-import anthropic
+import openai
+from openai import OpenAI
 
 # ── ランキングルール ────────────────────────────────────────────────────────
 
@@ -262,8 +263,8 @@ def save_cache(week, data):
 # ── LLM呼び出し ──────────────────────────────────────────────────────────────
 
 def generate_recipe_and_comment(market_summary, top_items, market_comment):
-    """Claude API でレシピとコメントを生成（キャッシュ可能）"""
-    client = anthropic.Anthropic()
+    """OpenAI API (GPT) でレシピとコメントを生成（キャッシュ可能）"""
+    client = OpenAI()
 
     system_prompt = """あなたは野菜料理のプロです。
 野菜の市況データをもとに、消費者向けのコメントと簡単レシピを生成します。"""
@@ -299,17 +300,19 @@ ranking_comments はランキング全品目分を生成してください。
 レシピは上位3品目分（簡潔に）を生成してください。"""
 
     try:
-        response = client.messages.create(
-            model="claude-opus-4-7",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             max_tokens=1500,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_message}]
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ]
         )
-    except anthropic.APIError as exc:
-        print(f"⚠ Claude APIを利用できないため、ローカルの代替コンテンツを使用します: {exc}")
+    except openai.APIError as exc:
+        print(f"⚠ OpenAI APIを利用できないため、ローカルの代替コンテンツを使用します: {exc}")
         return build_fallback_content(top_items, market_comment)
 
-    text = response.content[0].text
+    text = response.choices[0].message.content
     json_match = text.find('{')
     json_end = text.rfind('}') + 1
     if json_match >= 0 and json_end > json_match:
