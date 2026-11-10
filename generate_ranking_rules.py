@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude API で統計的なランキングルールを一度だけ生成する。
+OpenAI API (GPT) で統計的なランキングルールを一度だけ生成する。
 生成されたルールは ranking_rules.py に固定化される。
 """
 import json
@@ -16,9 +16,10 @@ if os.path.exists(_env_path):
                 _k, _v = _line.split("=", 1)
                 os.environ.setdefault(_k.strip(), _v.strip().strip('"').strip("'"))
 
-import anthropic
+import openai
+from openai import OpenAI
 
-client = anthropic.Anthropic()
+client = OpenAI()
 
 system_prompt = """あなたは青果マーケティングと統計分析のプロです。
 消費者にとって「おすすめの野菜」を評価するための数学的ルールを設計してください。
@@ -56,18 +57,18 @@ user_message = """現在の市況データに基づいて、消費者にとっ�
 
 これらを統計的に組み合わせたランキング公式を設計してください。"""
 
-print("Claude API でランキングルールを生成中...\n")
+print("OpenAI API (GPT) でランキングルールを生成中...\n")
 
-response = client.messages.create(
-    model="claude-3-5-sonnet-20241022",
+response = client.chat.completions.create(
+    model="gpt-4o",
     max_tokens=1500,
-    system=system_prompt,
     messages=[
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_message}
     ]
 )
 
-result_text = response.content[0].text
+result_text = response.choices[0].message.content
 print(result_text)
 print("\n" + "="*60)
 
