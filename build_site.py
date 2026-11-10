@@ -197,7 +197,7 @@ def render_ranking(recipe_data, items):
             comment = r.get("comment", "")
         else:
             comment = item_comments.get(name) or r.get("comment", "")
-        comment_html = f'<div class="card-comment">{comment}<span class="comment-src">Claude - 東京都中央卸売市場</span></div>' if comment else ""
+        comment_html = f'<div class="card-comment">{comment}<span class="comment-src">GPT - 東京都中央卸売市場</span></div>' if comment else ""
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:{bg}">
