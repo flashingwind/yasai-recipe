@@ -75,6 +75,9 @@ def veggie_visual(name):
 # ── データ読込 ────────────────────────────────────────────────────────────────
 
 def get_latest_csv():
+    plain = os.path.join(BASE, "market_data.csv")
+    if os.path.exists(plain):
+        return plain
     files = glob.glob(os.path.join(BASE, "market_data_*.csv"))
     return sorted(files, reverse=True)[0] if files else None
 
