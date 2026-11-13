@@ -75,6 +75,9 @@ def veggie_visual(name):
 # ── データ読込 ────────────────────────────────────────────────────────────────
 
 def get_latest_csv():
+    plain = os.path.join(BASE, "market_data.csv")
+    if os.path.exists(plain):
+        return plain
     files = glob.glob(os.path.join(BASE, "market_data_*.csv"))
     return sorted(files, reverse=True)[0] if files else None
 
@@ -173,10 +176,6 @@ def render_ranking(recipe_data, items):
     item_map = {r["品目"].strip(): r for r in items}
     ranking = recipe_data.get("ranking", [])
 
-    raw_comment = items[0].get("コメント", "") if items else ""
-    in_first_para = first_para_names(raw_comment)
-    item_comments = parse_item_comments(raw_comment)
-
     cards = ""
     medal = {1: "🥇", 2: "🥈", 3: "🥉"}
     for r in ranking:
@@ -189,12 +188,9 @@ def render_ranking(recipe_data, items):
         m = medal.get(rank, f"#{rank}")
         retail = r.get("retail_price")
         price_html = f'<div class="retail-price">🏪 約{retail}円<span class="per100g">/100g</span></div>' if retail else ""
-        # 一段目に出ていない品目は二段目の個別コメントを補完、なければAIコメント
-        if name in in_first_para:
-            comment = r.get("comment", "")
-        else:
-            comment = item_comments.get(name) or r.get("comment", "")
-        comment_html = f'<div class="card-comment">{comment}<span class="comment-src">Claude - 東京都中央卸売市場</span></div>' if comment else ""
+        # コメントはAI生成のみ（原文は転載しない）
+        comment = r.get("comment", "")
+        comment_html = f'<div class="card-comment">{comment}<span class="comment-src">GPT - 東京都中央卸売市場</span></div>' if comment else ""
         cards += f"""
     <div class="rank-card">
       <div class="rank-img-wrap" style="background:{bg}">
@@ -452,14 +448,10 @@ def build():
     items, week = load_market_data()
     recipe_data = load_recipe_cache(week) if week else None
 
-    # 市況コメント: CSV一段目 + AIコメント
-    raw_comment = items[0].get("コメント", "") if items else ""
-    first_para = extract_first_paragraph(raw_comment)
+    # 市況コメント: AI要約のみ（原文は転載しない）
     ai_comment = recipe_data.get("market_comment", "") if recipe_data else ""
 
     comment_parts = [f'<p class="comment-week">📅 {week} の市況</p>'] if week else []
-    if first_para:
-        comment_parts.append(f'<p class="comment-raw">{plain_terms(first_para)}</p>')
     if ai_comment:
         comment_parts.append(f'<p class="comment-ai">{plain_terms(ai_comment)}</p>')
     market_comment_html = f'<div class="comment-box">{"".join(comment_parts)}</div>' if comment_parts else ""

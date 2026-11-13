@@ -2,7 +2,7 @@
 """
 市況データをもとにランキングとレシピを生成する。
 - ランキング: 統計ルール（ranking_rules.json）で計算（API呼び出しなし）
-- コメント・レシピ: Claude API で生成（週ごとキャッシュ）
+- コメント・レシピ: OpenAI API (GPT) で生成（週ごとキャッシュ）
 """
 import csv
 import glob
@@ -23,7 +23,8 @@ if os.path.exists(_env_path):
                 _k, _v = _line.split("=", 1)
                 os.environ.setdefault(_k.strip(), _v.strip().strip('"').strip("'"))
 
-import anthropic
+import openai
+from openai import OpenAI
 
 # ── ランキングルール ────────────────────────────────────────────────────────
 
@@ -262,8 +263,8 @@ def save_cache(week, data):
 # ── LLM呼び出し ──────────────────────────────────────────────────────────────
 
 def generate_recipe_and_comment(market_summary, top_items, market_comment):
-    """Claude API でレシピとコメントを生成（キャッシュ可能）"""
-    client = anthropic.Anthropic()
+    """OpenAI API (GPT) でレシピとコメントを生成（キャッシュ可能）"""
+    client = OpenAI()
 
     system_prompt = """あなたは野菜料理のプロです。
 野菜の市況データをもとに、消費者向けのコメントと簡単レシピを生成します。"""
@@ -298,14 +299,20 @@ def generate_recipe_and_comment(market_summary, top_items, market_comment):
 ranking_comments はランキング全品目分を生成してください。
 レシピは上位3品目分（簡潔に）を生成してください。"""
 
-    response = client.messages.create(
-        model="claude-opus-4-7",
-        max_tokens=1500,
-        system=system_prompt,
-        messages=[{"role": "user", "content": user_message}]
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            max_tokens=1500,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ]
+        )
+    except openai.APIError as exc:
+        print(f"⚠ OpenAI APIを利用できないため、ローカルの代替コンテンツを使用します: {exc}")
+        return build_fallback_content(top_items, market_comment)
 
-    text = response.content[0].text
+    text = response.choices[0].message.content
     json_match = text.find('{')
     json_end = text.rfind('}') + 1
     if json_match >= 0 and json_end > json_match:
@@ -314,6 +321,48 @@ ranking_comments はランキング全品目分を生成してください。
         except json.JSONDecodeError:
             return {"market_comment": "レシピ生成エラー", "recipes": []}
     return {"market_comment": "レシピ生成エラー", "recipes": []}
+
+
+def build_fallback_content(top_items, market_comment):
+    """APIを利用できない場合もサイトを更新できるよう、簡易コンテンツを生成する。"""
+    names = [name for name, _, _ in top_items]
+    ranking_comments = {
+        name: f"{name}は今週のおすすめ野菜です。手軽な炒め物や和え物でお楽しみください。"
+        for name in names
+    }
+    recipes = []
+    recipe_templates = [
+        ("{item}の簡単ごま和え", ["{item} 1袋", "すりごま 大さじ1", "しょうゆ 小さじ1"], [
+            "{item}を食べやすい大きさに切る。",
+            "耐熱容器で{item}を電子レンジ加熱する。",
+            "水気を切り、すりごまとしょうゆで和える。",
+        ]),
+        ("{item}の塩炒め", ["{item} 1個", "ごま油 小さじ1", "塩 少々"], [
+            "{item}を食べやすい大きさに切る。",
+            "フライパンにごま油を熱して{item}を炒める。",
+            "火が通ったら塩で味を調える。",
+        ]),
+        ("{item}の味噌汁", ["{item} 適量", "だし汁 400ml", "味噌 大さじ1"], [
+            "{item}を食べやすい大きさに切る。",
+            "だし汁で{item}を柔らかくなるまで煮る。",
+            "火を止めて味噌を溶き入れる。",
+        ]),
+    ]
+    for item, template in zip(names[:3], recipe_templates):
+        title, ingredients, steps = template
+        recipes.append({
+            "title": title.format(item=item),
+            "item": item,
+            "time_min": 10,
+            "servings": "2人分",
+            "ingredients": [value.format(item=item) for value in ingredients],
+            "steps": [value.format(item=item) for value in steps],
+        })
+    return {
+        "market_comment": market_comment or "市況データをもとに、今週のおすすめ野菜を紹介しています。",
+        "ranking_comments": ranking_comments,
+        "recipes": recipes,
+    }
 
 
 # ── メイン ──────────────────────────────────────────────────────────────────
@@ -370,7 +419,7 @@ def main():
         recipes = cached.get("recipes", [])
     else:
         print("レシピ・コメント生成中...")
-        top_items = [(name, score, "") for name, score, r in scores[:3]]
+        top_items = [(name, score, "") for name, score, r in scores[:5]]
         market_comment = build_comment(items)
         recipe_data = generate_recipe_and_comment("", top_items, market_comment)
         ranking_comments = recipe_data.get("ranking_comments", {})
