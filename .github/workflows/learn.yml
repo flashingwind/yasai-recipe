@@ -21,7 +21,7 @@ jobs:
           python-version: "3.11"
 
       - name: 依存パッケージインストール
-        run: pip install requests beautifulsoup4 pypdf anthropic
+        run: pip install requests beautifulsoup4 pypdf anthropic openai
 
       - name: 市況データ取得
         run: python scrape_market_comment.py
