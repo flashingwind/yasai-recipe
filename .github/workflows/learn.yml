@@ -29,7 +29,9 @@ jobs:
       - name: ランキングルール学習
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python generate_ranking_rules.py > /tmp/rules_output.txt 2>&1; cat /tmp/rules_output.txt
+        run: |
+          python generate_ranking_rules.py 2>&1 | tee /tmp/rules_output.txt
+          exit ${PIPESTATUS[0]}
 
       - name: ルール更新をコミット
         run: |
